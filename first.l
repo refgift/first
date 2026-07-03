@@ -27,6 +27,20 @@ LETTER		[A-Z]
 %}
 
 %%
+{BG}*{LABEL}{BG}*:={BG}*RANDOM[;]*                  {
+
+					 bzero(label,256);
+					 sscanf(yytext," %s := RANDOM",label);
+				         for (int i=0;i<tp;i++) {                                                                                                           
+                                                if (strcmp(vars[i].label,label)==0) {                                                                                      
+                                                        type = vars[i].type;                                                                                               
+                                                        break;                                                                                                             
+                                                }                                                                                                                          
+                                        } if (type==0) {  			
+						printf("\tasm\(\"1: pause; rdrand %%0; jae 1b;\":\"=r\"\(%s));\n",label);
+						//printf("\t%s=integer1;\n",label);
+					}
+				}                                                                                                                                                                             
 {BG}*YIELD[;]*                  {                                                                                                                                                                              
                                         printf("\n\tasm\(\"pause;\");\n");                                                                                                                                     
                                 } 

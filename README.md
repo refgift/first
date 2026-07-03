@@ -20,3 +20,7 @@
 - INPUT and OUTPUT for standard input and output for literals and variables.
 - Basic math but soon isomorphic symbol  ? returns TRUE or FALSE like traditional comparisons.
  
+# Examples
+- zdatest.fst prints random numbers assignment from word RANDOM works but on;y that.
+- ./first < zdatest.fst | cc -x c - -o zdatest
+- Other examples are similar
