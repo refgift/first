@@ -15,8 +15,9 @@
 - ls -s | sort -n  for example
 
 # Developments
-- 3 datatypes: INTEGER, DENOTED, RANDOM
+- 2 datatypes: INTEGER, DENOTED
 - YIELD operator for CPU scheduling for goto loops that are too tight.
+- RANDOM operator for clean random from the CPU
 - INPUT and OUTPUT for standard input and output for literals and variables.
 - Basic math but soon isomorphic symbol  ? returns TRUE or FALSE like traditional comparisons.
  
