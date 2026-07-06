@@ -26,7 +26,7 @@
 - ./first < zdatest.fst | cc -x c - -o zdatest
 - Other examples are similar
 
-# zda - A proof of concept
+# zda - A code complete proof of concept
 - zda.fst is the first source
 - The function is to eliminate the loud zero that bugs you.
 - ./first < zda.fst  | cc -o zda -x c -
