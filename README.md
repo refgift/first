@@ -20,6 +20,7 @@
 - RANDOM operator for clean random from the CPU
 - INPUT and OUTPUT for standard input and output for literals and variables.
 - Basic math but soon isomorphic symbol  ? returns TRUE or FALSE like traditional comparisons.
+- IN and OUT for CPU I/O
  
 # Examples
 - zdatest.fst prints random numbers assignment from word RANDOM works but on;y that.
