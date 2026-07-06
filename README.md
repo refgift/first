@@ -24,3 +24,7 @@
 - zdatest.fst prints random numbers assignment from word RANDOM works but on;y that.
 - ./first < zdatest.fst | cc -x c - -o zdatest
 - Other examples are similar
+
+# zda - A proof of concept
+- zda.fst is the first source
+- The function is to eliminate the loud zero that bugs you.
