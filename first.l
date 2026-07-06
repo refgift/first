@@ -1,7 +1,7 @@
 LABELDECL	[A-Z]+[0-9]*":"
 LABEL		[A-Z]+[0-9]*
 BG		[ \t\n]
-ARITMETICS	[+-/*]
+ARITMETICS	[+-/*%]
 CONDITIONALS  	[<>!=?]
 DENOTER		["]
 DENOTATION	["]+.+["]+
@@ -55,7 +55,7 @@ LETTER		[A-Z]
 
 
 {BG}*OUTPUT{BG}+\".+\"		{
-					bzero(label,256);
+					bzero(text1,256);
 					sscanf(yytext," OUTPUT \"%256c\"", text1);
 					printf("	printf\(\"%%s \",\" %s);\n",text1);
 					}
@@ -115,6 +115,7 @@ LETTER		[A-Z]
 					bzero(text2,256);
 					bzero(text3,256);					
 					sscanf(yytext," IF %s %s %s THEN", text1, text2 , text3);
+					if (strcmp(text2,"=")==0) strcpy(text2,"==");
 					printf("	if ( %s %s %s )", text1,text2,text3);
 				}
 {BG}*{LABEL}+{BG}*":="+{BG}*({LETTER}|{DIGIT})+{BG}*{ARITMETICS}*{BG}*({LETTER}|{DIGIT})*[;]*	{
