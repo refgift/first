@@ -29,3 +29,4 @@
 # zda - A proof of concept
 - zda.fst is the first source
 - The function is to eliminate the loud zero that bugs you.
+- ./first < zda.fst  | cc -o zda -x c -
