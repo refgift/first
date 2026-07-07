@@ -9,6 +9,9 @@ BOOLEAN		TRUE|FALSE
 DIGIT		[0-9]
 LETTER		[A-Z]
 %{
+
+#include <stdbool.h>
+	
 	static char label[256];
 	static char text1[256];
 	static char text2[256];
@@ -107,10 +110,15 @@ LETTER		[A-Z]
 					vars[tp++].type=1;
 				}
 
-{BG}*IF{BG}*{DENOTATION}+{BG}*[?]{BG}+{DENOTATION}+{BG}*THEN+	{
-
-				}
+{BG}*IF{BG}*({LABEL}|{DENOTATION})+{BG}*[?]+{BG}+({LABEL}|{DENOTATION})+{BG}*THEN+	{
+					bzero(text1,256);					
+					bzero(text2,256);
+					sscanf(yytext," IF %s  %*1c %s THEN", text1, text2);
+					//printf("DEBUG: %s ? %s\n",text1, text2);
+					printf("\tif\(is_isomorphic\(%s,%s))\n",text1,text2);
+					}
 {BG}*IF{BG}*.+{BG}*THEN+	{
+
 					bzero(text1,256);
 					bzero(text2,256);
 					bzero(text3,256);					
@@ -147,12 +155,54 @@ LETTER		[A-Z]
 ";"			;
 .			printf("?");
 %%
+
+static char isofunct [] = R"(
+bool is_isomorphic(const char* s1, const char* s2) {
+   int len1 = strlen(s1);
+   int len2 = strlen(s2);
+
+
+    // Use arrays as hash maps to store character mappings
+    // Assuming ASCII characters, we can use an array of size 128 (or 256)
+    static int map1[256] = {0}; // Maps characters from s1 to s2
+    static int map2[256] = {0}; // Maps characters from s2 to s1 (to ensure one-to-one mapping)
+    
+    static int leni;
+
+    if (len1>len2) leni=len2;
+    else leni=len1;
+
+
+    for (int i = 0; i < leni; i++) {
+        char c1 = s1[i];
+        char c2 = s2[i];
+
+        // Check mapping from c1 to c2
+        if (map1[c1] == 0) {
+            map1[c1] = c2;
+        } else if (map1[c1] != c2) {
+            return false; // Inconsistent mapping
+        }
+
+        // Check mapping from c2 to c1
+        if (map2[c2] == 0) {
+            map2[c2] = c1;
+        } else if (map2[c2] != c1) {
+            return false; // Ensures one-to-one mapping
+        }
+    }
+
+    return true;
+})";
+
 int main(void) 
 {
 	printf("/* first Generated C code */\n");
 	printf("#include <stdlib.h>\n");
 	printf("#include <stdio.h>\n");
 	printf("#include <string.h>\n");	
+	printf("#include <stdbool.h>\n");	
+	printf("%s\n",isofunct);
 	printf("int main(void) {\n");
 	yylex();
 	printf("	return(0);\n");
