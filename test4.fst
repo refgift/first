@@ -4,9 +4,12 @@ BEGIN
 	A := "title";
 	B := "paper";
 
-	IF B ? A  THEN OUTPUT "Match\n";
-
-
-
+	IF A ? B  THEN 
+	BEGIN
+		OUTPUT "Match";
+		OUTPUT A;
+		OUTPUT B;
+		OUTPUT "\n"
+	END
 END
 
