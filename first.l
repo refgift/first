@@ -81,14 +81,18 @@ LETTER		[A-Z]
 {BG}*INPUT{BG}+{LABEL}+		{
 					bzero(label,256);
 					sscanf(yytext," INPUT %s", label);
-					for (int i=0;i<tp;i++) {
+					int i;
+					for (i=0;i<tp;i++) {
 						if (strcmp(vars[i].label,label)==0) {					
 							type = vars[i].type;
 							break;
 						}
 					}
 					if (type==0) printf("\n\tscanf\(\" %%d \", &%s);\n",label);
-					else if (type==1) printf("\n\tscanf\(\" %%256c \", %s);\n",label);
+					else if (type==1) { 
+						printf("\n\tbzero(%s,256);\n",label);
+						printf("\n\tfgets\(%s,256,stdin);\n",label);
+					}
 					else REJECT;
 
 
@@ -154,6 +158,7 @@ LETTER		[A-Z]
 {BG}*			;
 ";"			;
 .			printf("?");
+\x04			;
 %%
 
 static char isofunct [] = R"(
@@ -202,6 +207,7 @@ int main(void)
 	printf("#include <stdio.h>\n");
 	printf("#include <string.h>\n");	
 	printf("#include <stdbool.h>\n");	
+	printf("#include <strings.h>\n");	
 	printf("%s\n",isofunct);
 	printf("int main(void) {\n");
 	yylex();
