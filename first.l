@@ -30,7 +30,12 @@ LETTER		[A-Z]
 %}
 
 %%
-{BG}*{LABEL}{BG}*:={BG}*RANDOM[;]*                  {
+{BG}*IN{BG}*({DIGIT})+{BG}*[,]+{BG}*{LABEL}+ {
+						bzero(label,256);
+						sscanf(yytext, " IN %d , %s",&integer1, label);
+						printf("\n\tasm\(\"in %d, %s;\");",integer1,label);
+					}
+{BG}*{LABEL}{BG}*:={BG}*RANDOM{BG}*[;]*                  {
 
 					 bzero(label,256);
 					 sscanf(yytext," %s := RANDOM",label);
@@ -44,7 +49,7 @@ LETTER		[A-Z]
 						//printf("\t%s=integer1;\n",label);
 					}
 				}                                                                                                                                                                             
-{BG}*YIELD[;]*                  {                                                                                                                                                                              
+{BG}*YIELD{BG}*[;]*                  {                                                                                                                                                                              
                                         printf("\n\tasm\(\"pause;\");\n");                                                                                                                                     
                                 } 
 
@@ -91,7 +96,7 @@ LETTER		[A-Z]
 					if (type==0) printf("\n\tscanf\(\" %%d \", &%s);\n",label);
 					else if (type==1) { 
 						printf("\n\tbzero(%s,256);\n",label);
-						printf("\n\tfgets\(%s,256,stdin);\n",label);
+						printf("\n\tscanf\(\"%%s\",%s);\n",label);
 					}
 					else REJECT;
 
@@ -130,7 +135,7 @@ LETTER		[A-Z]
 					if (strcmp(text2,"=")==0) strcpy(text2,"==");
 					printf("	if ( %s %s %s )", text1,text2,text3);
 				}
-{BG}*{LABEL}+{BG}*":="+{BG}*({LETTER}|{DIGIT})+{BG}*{ARITMETICS}*{BG}*({LETTER}|{DIGIT})*[;]*	{
+{BG}*{LABEL}+{BG}*":="+{BG}*({LETTER}|{DIGIT})+{BG}*{ARITMETICS}*{BG}*({LETTER}|{DIGIT})*{BG}*[;]*	{
 					bzero(text1,256);
 					bzero(text2,256);
 					bzero(text3,256);
@@ -154,7 +159,7 @@ LETTER		[A-Z]
 				sscanf(yytext," GOTO %s", label); 
 				printf("	goto %s;\n", label); 
 			}
-^{LABELDECL}+		printf("%s\n",yytext);
+^{LABELDECL}+		printf("\n%s",yytext);
 {BG}*			;
 ";"			;
 .			printf("?");
@@ -162,42 +167,49 @@ LETTER		[A-Z]
 %%
 
 static char isofunct [] = R"(
-bool is_isomorphic(const char* s1, const char* s2) {
-   int len1 = strlen(s1);
-   int len2 = strlen(s2);
+/**                                                                           
+ * Checks if two strings are isomorphic.                                      
+ * @param s1 The first string.                                                
+ * @param s2 The second string.                                               
+ * @return True if the strings are isomorphic, false otherwise.               
+ */                                                                           
+bool is_isomorphic(const char* s1, const char* s2) {                          
+   int len1 = strlen(s1);                                                     
+   int len2 = strlen(s2);                                                     
+                                                                              
+                                                                              
+    // Use arrays as hash maps to store character mappings                    
+    // Assuming ASCII characters, we can use an array of size 128 (or 256)    
+    static int map1[128] = {0}; // Maps characters from s1 to s2              
+    static int map2[128] = {0}; // Maps characters from s2 to s1 (to ensure on
+                                                                              
+    static int leni;                                                          
+                                                                              
+    if (len1>len2) leni=len2;                                                 
+    else leni=len1;                                                           
+                                                                              
+                                                                              
+    for (int i = 0; i < leni; i++) {                                          
+        char c1 = s1[i];                                                      
+        char c2 = s2[i];                                                      
+                                                                              
+        // Check mapping from c1 to c2                                        
+        if (map1[c1] == 0) {                                                  
+            map1[c1] = c2;                                                    
+        } else if (map1[c1] != c2) {                                          
+            return false; // Inconsistent mapping                             
+        }                                                                     
+                                                                              
+        // Check mapping from c2 to c1                                        
+        if (map2[c2] == 0) {                                                  
+            map2[c2] = c1;                                                    
+        } else if (map2[c2] != c1) {                                          
+            return false; // Ensures one-to-one mapping                       
+        }                                                                     
+    }                                                                         
+                                                                              
+    return true;                                                              
 
-
-    // Use arrays as hash maps to store character mappings
-    // Assuming ASCII characters, we can use an array of size 128 (or 256)
-    static int map1[256] = {0}; // Maps characters from s1 to s2
-    static int map2[256] = {0}; // Maps characters from s2 to s1 (to ensure one-to-one mapping)
-    
-    static int leni;
-
-    if (len1>len2) leni=len2;
-    else leni=len1;
-
-
-    for (int i = 0; i < leni; i++) {
-        char c1 = s1[i];
-        char c2 = s2[i];
-
-        // Check mapping from c1 to c2
-        if (map1[c1] == 0) {
-            map1[c1] = c2;
-        } else if (map1[c1] != c2) {
-            return false; // Inconsistent mapping
-        }
-
-        // Check mapping from c2 to c1
-        if (map2[c2] == 0) {
-            map2[c2] = c1;
-        } else if (map2[c2] != c1) {
-            return false; // Ensures one-to-one mapping
-        }
-    }
-
-    return true;
 })";
 
 int main(void) 
