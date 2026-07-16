@@ -34,4 +34,4 @@
 - ./first < zda.fst  | cc -o zda -x c -
 
 # Work Arounds
-- Assignment of literal INTEGER to VARIABLE: instead A:=0; try A := 0;
+- Assignment of literal INTEGER to VARIABLE: instead of A:=0; try A := 0;
