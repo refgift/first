@@ -1,3 +1,4 @@
+
 LABELDECL	[A-Z]+[0-9]*":"
 LABEL		[A-Z]+[0-9]*
 BG		[ \t\n]
@@ -30,24 +31,13 @@ ASSIGNER	[:][=]
 	static int tp;
 	static int type;
 
-void parse_label(char * txt) {
-	static int i;
-	static int l1,l2;
-	bzero(label,256);
-	while(txt[i]==' ') i++;
-	l1=i;
-	while(txt[i]!=' '||txt[i]!=':') i++;
-	l2=i;
-	strncpy(label,txt+l1,l2-l1);
-}
-
 %}
 
 %%
 {BG}*IN{BG}*({DIGIT})+{BG}*[,]+{BG}*{LABEL}+ {
 						bzero(label,256);
 						sscanf(yytext, " IN %d , %s",&integer1, label);
-						printf("\n\tasm\(\"in %d, %s;\");",integer1,label);
+						printf("\n\tasm\(\"in $%d, %%0;\":\"=a\"\(&%s));",integer1,label);
 					}
 {BG}*{LABEL}{BG}*:={BG}*RANDOM{BG}*[;]*    {
 
@@ -133,12 +123,12 @@ void parse_label(char * txt) {
 					vars[tp++].type=1;
 				}
 
-{BG}*IF{BG}*({LABEL}|{DENOTATION})+{BG}*[?]+{BG}+({LABEL}|{DENOTATION})+{BG}*THEN+	{
+{BG}*IF{BG}*{LABEL}+{BG}*[?]+{BG}+{DENOTATION}+{BG}*THEN+	{
 					bzero(text1,256);					
 					bzero(text2,256);
-					sscanf(yytext," IF %s %*[?] %s THEN", text1, text2);
+					sscanf(yytext," IF %s %*[?] \"%[^\"]\" THEN", text1, text2);
 					//printf("DEBUG: %s ? %s\n",text1, text2);
-					printf("\tif\(is_isomorphic\(%s,%s))\n",text1,text2);
+					printf("\tif\(is_isomorphic\(%s,\"%s\"))\n",text1,text2);
 					}
 {BG}*IF{BG}*.+{BG}*THEN+	{
 					bzero(text1,256);
