@@ -1,0 +1,8 @@
+[Unit]
+Description=ZDA
+
+[Service]
+ExecStart=/usr/local/bin/zda
+
+[Install]
+WantedBy=multi-user.target

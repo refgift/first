@@ -1,7 +1,9 @@
-# FIRST - A process language. Combine with pipes to create procedures.
+# FIRST - A process language. 
+- Procedures belong to the operating system.
+- The language goal is to translate math into the computer.
 - Started June 2026, expect daily progress, maybe weekly.
 - Test programs to show translation to C programs that compile and run.
-- very simple subset of the ALGOL language without complexity.
+- very simple subset of the ALGOL language without the complexity.
 
 # Build
 - flex -8 first.l
@@ -10,28 +12,32 @@
 - cc test.c -o test
 - ./test
 
-# Combining With Pipes
+# Combining with pipes to make a procedure
 - UNIX and LINUX have the pipe operator, |, in the shell enviroment of the Terminal.
-- ls -s | sort -n  for example
+- ls -s | sort -n for example combines 2 processes ls and sort to 
+  create a procedure of listing files sorted from smallest to largest
 
-# Developments
+# What Works
 - 2 datatypes: INTEGER, DENOTED
 - YIELD operator for CPU scheduling for goto loops that are too tight.
 - RANDOM operator for clean random from the CPU
 - INPUT and OUTPUT for standard input and output for literals and variables.
-- ? returns TRUE or FALSE like traditional comparisons, but isometric.
-- IN and OUT for CPU I/O is next feature
-- An error in ? compares, spaces make a difference, and " paper " compare to "title" fails.
+- ? symbol for isomorphic compare.
+
+# What Fails
+- IN and OUT for CPU I/O 
+- Assignment of literal INTEGER to VARIABLE: instead of A:=0; try A := 0;
+- In general, spaces are required between and betwixt the elements of the language.
  
 # Examples
 - zdatest.fst prints random numbers assignment from word RANDOM works but on;y that.
 - ./first < zdatest.fst | cc -x c - -o zdatest
 - Other examples are similar
 
-# zda - A code complete proof of concept
+# zda - A process proof of concept
 - zda.fst is the first source
-- The function is to eliminate the loud zero that bugs you.
-- ./first < zda.fst  | cc -o zda -x c -
+- The purpose is to out others that have a zero score.
+- The compile procedure: ./first < zda.fst  | cc -o zda -x c -
 
-# Work Arounds
-- Assignment of literal INTEGER to VARIABLE: instead of A:=0; try A := 0;
+
+

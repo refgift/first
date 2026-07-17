@@ -1,11 +1,15 @@
 BEGIN
         DENOTED TITLE;
-        TITLE := "ENTER A TEXT WITHOUT QUOTES, CTRL-D to finish FOR  DENOTED VARIABLE TEST 3\n";
- 
+	TITLE := "TEST 3 : Words\n";
         OUTPUT TITLE;      
-	
 	DENOTED A;
-	INPUT A;
-       
-        OUTPUT A
+
+LOOP:	INPUT A;    
+        OUTPUT A;
+	OUTPUT "\t";
+	YIELD;
+	IF A ? "blank" THEN GOTO FINIS; 
+	GOTO LOOP;
+
+FINIS:  OUTPUT "\n"
 END

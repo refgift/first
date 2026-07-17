@@ -8,6 +8,8 @@ DENOTATION	["]+.+["]+
 BOOLEAN		TRUE|FALSE
 DIGIT		[0-9]
 LETTER		[A-Z]
+INTEGER		[-]*[0-9]+
+ASSIGNER	[:][=]
 %{
 
 #include <stdbool.h>
@@ -27,6 +29,18 @@ LETTER		[A-Z]
 	static struct types vars[10000];
 	static int tp;
 	static int type;
+
+void parse_label(char * txt) {
+	static int i;
+	static int l1,l2;
+	bzero(label,256);
+	while(txt[i]==' ') i++;
+	l1=i;
+	while(txt[i]!=' '||txt[i]!=':') i++;
+	l2=i;
+	strncpy(label,txt+l1,l2-l1);
+}
+
 %}
 
 %%
@@ -35,7 +49,7 @@ LETTER		[A-Z]
 						sscanf(yytext, " IN %d , %s",&integer1, label);
 						printf("\n\tasm\(\"in %d, %s;\");",integer1,label);
 					}
-{BG}*{LABEL}{BG}*:={BG}*RANDOM{BG}*[;]*                  {
+{BG}*{LABEL}{BG}*:={BG}*RANDOM{BG}*[;]*    {
 
 					 bzero(label,256);
 					 sscanf(yytext," %s := RANDOM",label);
@@ -93,7 +107,7 @@ LETTER		[A-Z]
 							break;
 						}
 					}
-					if (type==0) printf("\n\tscanf\(\" %%d \", &%s);\n",label);
+					if (type==0) printf("\n\tscanf\(\"%%d\", &%s);\n",label);
 					else if (type==1) { 
 						printf("\n\tbzero(%s,256);\n",label);
 						printf("\n\tscanf\(\"%%s\",%s);\n",label);
@@ -122,12 +136,11 @@ LETTER		[A-Z]
 {BG}*IF{BG}*({LABEL}|{DENOTATION})+{BG}*[?]+{BG}+({LABEL}|{DENOTATION})+{BG}*THEN+	{
 					bzero(text1,256);					
 					bzero(text2,256);
-					sscanf(yytext," IF %s  %*1c %s THEN", text1, text2);
+					sscanf(yytext," IF %s %*[?] %s THEN", text1, text2);
 					//printf("DEBUG: %s ? %s\n",text1, text2);
 					printf("\tif\(is_isomorphic\(%s,%s))\n",text1,text2);
 					}
 {BG}*IF{BG}*.+{BG}*THEN+	{
-
 					bzero(text1,256);
 					bzero(text2,256);
 					bzero(text3,256);					
@@ -135,21 +148,29 @@ LETTER		[A-Z]
 					if (strcmp(text2,"=")==0) strcpy(text2,"==");
 					printf("	if ( %s %s %s )", text1,text2,text3);
 				}
-{BG}*{LABEL}+{BG}*":="+{BG}*({LETTER}|{DIGIT})+{BG}*{ARITMETICS}*{BG}*({LETTER}|{DIGIT})*{BG}*[;]*	{
+{BG}*{LABEL}+{BG}*:={BG}*{LABEL}+{BG}*{ARITMETICS}*{BG}*({LABEL}|{INTEGER})*{BG}*[;]*;	{
 					bzero(text1,256);
 					bzero(text2,256);
 					bzero(text3,256);
-					bzero(text4,256);					
-					int s = sscanf(yytext, "%s := %s %s %s", text1, text2, text3 ,text4);
-					//printf("%s Scan Count: %d\n",yytext, s);
-					printf("\t%s=%s %s %s ; \n",text1, text2, text3 , text4);
+					bzero(label,256);
+					sscanf(yytext, "%s := %s %s %s", label, text1, text2, text3);
+					printf("\t%s=%s%s%s;\n",label, text1,text2,text3);
+					}
+{BG}*{LABEL}+{BG}+:={BG}+{INTEGER}{BG}*[;]*	{
+					bzero(text1,256);
+					bzero(text2,256);
+					sscanf(yytext, "%s := %d", text1, &integer1);
+					printf("\t%s=%d;\n",text1, integer1);
 				}
-{BG}*{LABEL}+{BG}*:={BG}*{DENOTATION}+[;]*	 	{
+
+	/* TITLE := "ENTER A TEXT WITHOUT QUOTES, CTRL-D to finish FOR TEST 3\n"; */
+
+{BG}*{LABEL}+{BG}+:={BG}+{DENOTATION}+{BG}*[;]*	 	{
 							bzero(label,256);
 							bzero(text1,256);
-							int s = sscanf(yytext, "%s := \" %[^\"] \"", label, text1);
+							int s = sscanf(yytext, " %s := \"%[^\"]\" )", label, text1);
 							if (s==2) printf("\tstrcpy(%s,\" %s \");", label, text1);
-							else printf("\tError: parsed %d tokens %s\n",s, yytext);
+							else printf("\t/* Error: parsed %d tokens %s*/\n",s, label);
 							}
 		
 {BG}*BEGIN		printf("{\n");
