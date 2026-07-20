@@ -1,0 +1,7 @@
+BEGIN
+	INTEGER X;
+	
+	IN 16 , X;
+	
+	OUTPUT X;
+END
