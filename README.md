@@ -23,9 +23,10 @@
 - RANDOM operator for clean random from the CPU
 - INPUT and OUTPUT for standard input and output for literals and variables.
 - ? symbol for isomorphic compare.
+- IN for port access, has to be optimized cc with -O and run with sudo or su.
 
 # What Fails
-- IN and OUT for CPU I/O 
+- OUT for CPU port I/O 
 - Assignment of literal INTEGER to VARIABLE: instead of A:=0; try A := 0;
 - In general, spaces are required between and betwixt the elements of the language.
  

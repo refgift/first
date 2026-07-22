@@ -37,7 +37,11 @@ ASSIGNER	[:][=]
 {BG}*IN{BG}*({DIGIT})+{BG}*[,]+{BG}*{LABEL}+ {
 						bzero(label,256);
 						sscanf(yytext, " IN %d , %s",&integer1, label);
-						printf("\n\tasm\(\"in $%d, %%0;\":\"=a\"\(&%s));",integer1,label);
+						printf("\n\t{ ioperm(%d,8,1);",integer1);
+						printf("\n\t	static unsigned char iotmp;");
+						printf("\n\t	iotmp = inb(%d);", integer1);
+						printf("\n\t	%s = (int) iotmp;", label);	
+						printf("\n\t	ioperm(%d,8,0); }",integer1);
 					}
 {BG}*{LABEL}{BG}*:={BG}*RANDOM{BG}*[;]*    {
 
@@ -231,6 +235,7 @@ int main(void)
 	printf("#include <string.h>\n");	
 	printf("#include <stdbool.h>\n");	
 	printf("#include <strings.h>\n");	
+	printf("#include <sys/io.h>\n");	
 	printf("%s\n",isofunct);
 	printf("int main(void) {\n");
 	yylex();
