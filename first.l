@@ -2,7 +2,7 @@
 LABELDECL	[A-Z]+[0-9]*":"
 LABEL		[A-Z]+[0-9]*
 BG		[ \t\n]
-ARITMETICS	[+-/*%]
+ARITMETICS	[&^|+-/*%]
 CONDITIONALS  	[<>!=?]
 DENOTER		["]
 DENOTATION	["]+.+["]+
@@ -34,6 +34,13 @@ ASSIGNER	[:][=]
 %}
 
 %%
+{BG}*OUT{BG}*({DIGIT})+{BG}*[,]+{BG}*{LABEL}+ {
+						bzero(label,256);
+						sscanf(yytext, " OUT %d , %s",&integer1, label);
+						printf("\n\t{   ioperm(%d,8,1);",integer1);
+						printf("\n\t	outb(%s,%d);", label, integer1);
+						printf("\n\t	ioperm(%d,8,0); }",integer1);
+						}
 {BG}*IN{BG}*({DIGIT})+{BG}*[,]+{BG}*{LABEL}+ {
 						bzero(label,256);
 						sscanf(yytext, " IN %d , %s",&integer1, label);
