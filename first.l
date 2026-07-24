@@ -21,6 +21,7 @@ ASSIGNER	[:][=]
 	static char text3[256];
 	static char text4[256];
 	static int integer1;
+	unsigned char data1;
 
 	struct types {
 		char label[256];
@@ -30,25 +31,28 @@ ASSIGNER	[:][=]
 	static struct types vars[10000];
 	static int tp;
 	static int type;
+/* ; NASM Syntax for a Cold Reboot
+mov dx, 0xCF9
+mov al, 0x0E
+out dx, al
+*/
 
 %}
 
 %%
 {BG}*OUT{BG}*({DIGIT})+{BG}*[,]+{BG}*{LABEL}+ {
 						bzero(label,256);
-						sscanf(yytext, " OUT %d , %s",&integer1, label);
-						printf("\n\t{   ioperm(%d,8,1);",integer1);
-						printf("\n\t	outb(%s,%d);", label, integer1);
-						printf("\n\t	ioperm(%d,8,0); }",integer1);
+						sscanf(yytext, " OUT %d , %s",&data1, label);
+						printf("\n\t{unsigned char data;");
+						printf("\n\tdata = %s;",label);
+						printf("\n\tasm(\"outb %%0, $%d\": :\"a\"(data));}",integer1);
 						}
 {BG}*IN{BG}*({DIGIT})+{BG}*[,]+{BG}*{LABEL}+ {
 						bzero(label,256);
 						sscanf(yytext, " IN %d , %s",&integer1, label);
-						printf("\n\t{ ioperm(%d,8,1);",integer1);
-						printf("\n\t	static unsigned char iotmp;");
-						printf("\n\t	iotmp = inb(%d);", integer1);
-						printf("\n\t	%s = (int) iotmp;", label);	
-						printf("\n\t	ioperm(%d,8,0); }",integer1);
+						printf("\n\t{unsigned char data;");
+						printf("\n\tasm(\"inb $%d, %%0;\":\"=a\"(data));",integer1);
+						printf("\n\t%s = data;}",label);
 					}
 {BG}*{LABEL}{BG}*:={BG}*RANDOM{BG}*[;]*    {
 
@@ -241,7 +245,7 @@ int main(void)
 	printf("#include <string.h>\n");	
 	printf("#include <stdbool.h>\n");	
 	printf("#include <strings.h>\n");	
-	printf("#include <sys/io.h>\n");	
+//	printf("#include <sys/io.h>\n");	
 	printf("%s\n",isofunct);
 	printf("int main(void) {\n");
 	yylex();

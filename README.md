@@ -23,11 +23,10 @@
 - RANDOM operator for clean random from the CPU
 - INPUT and OUTPUT for standard input and output for literals and variables.
 - ? symbol for isomorphic compare.
-- IN for port access, has to be optimized cc with -O and run with sudo or su.
-- OUT is like IN above. 
+- IN and OUT for byte sized port access  
 
 # What Fails
-- test6.fst is how to reboot the system but fails on Linux for some reason.
+- test6.fst is how to reboot the system but fails due to lack of privilege
 - Assignment of literal INTEGER to VARIABLE: instead of A:=0; try A := 0;
 - In general, spaces are required between and betwixt the elements of the language.
  
