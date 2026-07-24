@@ -5,14 +5,13 @@ BEGIN
 	QUIT := "BLANK";
 	A := "title";
 	B := "paper";
-S1:
-	IF A ? B  THEN 
+S:	IF A ? B  THEN 
 	BEGIN
 		OUTPUT "Match";
 		OUTPUT A;
 		OUTPUT B;
 		OUTPUT "\n"
-	END
+	END;
 	OUTPUT "\nEnter Text Patterns a and b\n";
 	INPUT A;
 	OUTPUT A;
@@ -21,9 +20,9 @@ S1:
 	YIELD ;
 	IF A ? QUIT THEN
 	BEGIN
-		GOTO S2;
+		GOTO T;
 	END 
-	GOTO S1
-S2:	OUTPUT "\nEnded\n"
+	GOTO S;
+T:	OUTPUT "\nEnded\n";
 END
 

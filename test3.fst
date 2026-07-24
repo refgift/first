@@ -3,12 +3,14 @@ BEGIN
 	TITLE := "TEST 3 : Words\n";
         OUTPUT TITLE;      
 	DENOTED A;
+	DENOTED QUIT;
+	QUIT := "blank";
 
 LOOP:	INPUT A;    
         OUTPUT A;
 	OUTPUT "\t";
 	YIELD;
-	IF A ? "blank" THEN GOTO FINIS; 
+	IF A ? QUIT THEN GOTO FINIS; 
 	GOTO LOOP;
 
 FINIS:  OUTPUT "\n"

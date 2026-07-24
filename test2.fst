@@ -7,6 +7,7 @@ INTEGER I;
 INCREMENT:
 	C := C + I;
         OUTPUT C;
+	OUTPUT "\r";
 	YIELD;
 	GOTO INCREMENT
 END

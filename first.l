@@ -3,7 +3,7 @@ LABELDECL	[A-Z]+[0-9]*":"
 LABEL		[A-Z]+[0-9]*
 BG		[ \t\n]
 ARITMETICS	[&^|+-/*%]
-CONDITIONALS  	[<>!=?]
+CONDITIONALS  	[<>!=]
 DENOTER		["]
 DENOTATION	["]+.+["]+
 BOOLEAN		TRUE|FALSE
@@ -134,12 +134,12 @@ ASSIGNER	[:][=]
 					vars[tp++].type=1;
 				}
 
-{BG}*IF{BG}*{LABEL}+{BG}*[?]+{BG}+{DENOTATION}+{BG}*THEN+	{
+{BG}*IF{BG}*{LABEL}+{BG}*"?"+{BG}*{LABEL}+{BG}*THEN+	{
 					bzero(text1,256);					
 					bzero(text2,256);
-					sscanf(yytext," IF %s %*[?] \"%[^\"]\" THEN", text1, text2);
+					sscanf(yytext," IF %s ? %s THEN", text1, text2);
 					//printf("DEBUG: %s ? %s\n",text1, text2);
-					printf("\tif\(is_isomorphic\(%s,\"%s\"))\n",text1,text2);
+					printf("\tif\(is_isomorphic\(%s,%s))\n",text1,text2);
 					}
 {BG}*IF{BG}*.+{BG}*THEN+	{
 					bzero(text1,256);
@@ -164,7 +164,6 @@ ASSIGNER	[:][=]
 					printf("\t%s=%d;\n",text1, integer1);
 				}
 
-	/* TITLE := "ENTER A TEXT WITHOUT QUOTES, CTRL-D to finish FOR TEST 3\n"; */
 
 {BG}*{LABEL}+{BG}+:={BG}+{DENOTATION}+{BG}*[;]*	 	{
 							bzero(label,256);

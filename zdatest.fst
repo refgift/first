@@ -3,7 +3,7 @@ BEGIN
 	
 S1:	RND := RANDOM;
 	OUTPUT RND;
-	OUTPUT "\n";
+	OUTPUT "\r";
 	YIELD;
 	GOTO S1
 END

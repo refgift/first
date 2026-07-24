@@ -3,9 +3,9 @@ BEGIN
 	INTEGER B;
 	INTEGER C
 HERE:
-	OUTPUT "\nEnter A\n";
+	OUTPUT "\nEnter integer A\n";
 	INPUT A;
-	OUTPUT "\nEnter B\n";
+	OUTPUT "\nEnter integer B\n";
 	INPUT B;
 	C := A + B;
 	OUTPUT "\nC = A + B\n";
