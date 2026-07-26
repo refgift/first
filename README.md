@@ -35,10 +35,10 @@
 - ./first < zdatest.fst | cc -x c - -o zdatest
 - Other examples are similar
 
-# zda - A process proof of concept
+# zda - A reality control, a work in progress.
 - zda.fst is the first source
 - The purpose is to out others that have a zero score.
 - The compile procedure: ./first < zda.fst  | cc -o zda -x c -
-
+- Run it and see it run with top utility.
 
 
