@@ -24,6 +24,7 @@
 - INPUT and OUTPUT for standard input and output for literals and variables.
 - ? symbol for isomorphic compare.
 - IN and OUT for byte sized port access  
+- Assignment of the COUNT of an assigned DENOTED to an INTEGER; See test5.fst
 
 # What Fails
 - test6.fst is how to reboot the system but fails due to lack of privilege
