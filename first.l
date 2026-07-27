@@ -55,28 +55,40 @@ out dx, al
 						printf("\n\t%s = data;}",label);
 					}
 {BG}*{LABEL}{BG}*:={BG}*RANDOM{BG}*[;]*    {
-
 					 bzero(label,256);
 					 sscanf(yytext," %s := RANDOM",label);
+					 { static int type;
 				         for (int i=0;i<tp;i++) {                                                                                                           
                                                 if (strcmp(vars[i].label,label)==0) {                                                                                      
                                                         type = vars[i].type;                                                                                               
                                                         break;                                                                                                             
                                                 }                                                                                                                          
-                                        } if (type==0) {  			
+                                        } 
+					if (type==0) {  			
 						printf("\tasm\(\"1: pause; rdrand %%0; jae 1b;\":\"=r\"\(%s));\n",label);
 						//printf("\t%s=integer1;\n",label);
+					}
 					}
 				}                                                                                                                                                                             
 {BG}*YIELD{BG}*[;]*                  {                                                                                                                                                                              
                                         printf("\n\tasm\(\"pause;\");\n");                                                                                                                                     
                                 } 
 
-{BG}*COUNT{BG}+({LABEL}|{DENOTATION})+	{
-						if (yytext[0]=='"') integer1=strlen(yytext);
-
+{BG}*{LABEL}{BG}+:={BG}*COUNT{BG}+{LABEL}+	{
+					bzero(label,256);
+					bzero(text1,256);
+					sscanf(yytext," %s := %*s %s", label, text1); 
+				 	static int type;       
+					for (int i=0;i<tp;i++) {
+                                                if (strcmp(vars[i].label,label)==0) {
+                                                        type = vars[i].type;                                                                                             
+							break;
+						}
 					}
-
+					if (type == 0) { 
+						printf("\n\t%s = strlen(%s); ", label, text1);
+					}
+				}
 					
 
 
@@ -84,10 +96,10 @@ out dx, al
 {BG}*OUTPUT{BG}+\".+\"		{
 					bzero(text1,256);
 					sscanf(yytext," OUTPUT \"%256c\"", text1);
-					printf("	printf\(\"%%s \",\" %s);\n",text1);
+					printf("	printf\(\"%%s\",\" %s);\n",text1);
 					}
 
-{BG}*OUTPUT{BG}+{LABEL}+		{
+{BG}*OUTPUT{BG}+{LABEL}+	{
 
 					bzero(label,256);
 					sscanf(yytext," OUTPUT %s", label);
@@ -153,7 +165,7 @@ out dx, al
 					if (strcmp(text2,"=")==0) strcpy(text2,"==");
 					printf("	if ( %s %s %s )", text1,text2,text3);
 				}
-{BG}*{LABEL}+{BG}*:={BG}*{LABEL}+{BG}*{ARITMETICS}*{BG}*({LABEL}|{INTEGER})*{BG}*[;]*;	{
+{BG}*{LABEL}+{BG}*:={BG}*{LABEL}+{BG}*{ARITMETICS}+{BG}*({LABEL}|{INTEGER})+{BG}*[;]*;	{
 					bzero(text1,256);
 					bzero(text2,256);
 					bzero(text3,256);
@@ -173,7 +185,7 @@ out dx, al
 							bzero(label,256);
 							bzero(text1,256);
 							int s = sscanf(yytext, " %s := \"%[^\"]\" )", label, text1);
-							if (s==2) printf("\tstrcpy(%s,\" %s \");", label, text1);
+							if (s==2) printf("\tstrcpy(%s,\"%s\");", label, text1);
 							else printf("\t/* Error: parsed %d tokens %s*/\n",s, label);
 							}
 		

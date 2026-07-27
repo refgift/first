@@ -1,7 +1,7 @@
 BEGIN
         DENOTED TITLE;
 	TITLE := "TEST 3 : Words\n";
-        OUTPUT TITLE;      
+        OUTPUT TITLE;
 	DENOTED A;
 	DENOTED QUIT;
 	QUIT := "blank";

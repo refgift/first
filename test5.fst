@@ -1,0 +1,11 @@
+BEGIN
+	INTEGER C;
+	DENOTED T;
+	
+	T := "0123456789"
+	OUTPUT T;
+	OUTPUT "\nCharacter Count: ";
+	C := COUNT T;
+	OUTPUT C;
+	OUTPUT "\n";
+END
