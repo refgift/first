@@ -170,14 +170,19 @@ out dx, al
 					sscanf(yytext, "%s := %s %s %s", label, text1, text2, text3);
 					printf("\t%s=%s%s%s;\n",label, text1,text2,text3);
 					}
+
 {BG}*{LABEL}+{BG}+:={BG}+{INTEGER}{BG}*[;]*	{
 					bzero(text1,256);
 					bzero(text2,256);
 					sscanf(yytext, "%s := %ld", text1, &longeger1);
 					printf("\t%s=%ld;\n",text1, longeger1);
 				}
-
-
+{BG}*{LABEL}+{BG}+:={BG}+{LABEL}{BG}*[;]*	{
+					bzero(text1,256);
+					bzero(text2,256);
+					sscanf(yytext, "%s := %s", text1, text2);
+					printf("\t%s=%s;\n",text1, text2);
+					}
 {BG}*{LABEL}+{BG}+:={BG}+{DENOTATION}+{BG}*[;]*	 	{
 							bzero(label,256);
 							bzero(text1,256);
