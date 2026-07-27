@@ -1,4 +1,3 @@
-
 LABELDECL	[A-Z]+[0-9]*":"
 LABEL		[A-Z]+[0-9]*
 BG		[ \t\n]
@@ -20,17 +19,17 @@ ASSIGNER	[:][=]
 	static char text2[256];
 	static char text3[256];
 	static char text4[256];
-	static int integer1;
+	static long longeger1;
 	unsigned char data1;
 
 	struct types {
 		char label[256];
-		int type;
+		long type;
 	};
 
 	static struct types vars[10000];
-	static int tp;
-	static int type;
+	static long tp;
+	static long type;
 /* ; NASM Syntax for a Cold Reboot
 mov dx, 0xCF9
 mov al, 0x0E
@@ -42,32 +41,30 @@ out dx, al
 %%
 {BG}*OUT{BG}*({DIGIT})+{BG}*[,]+{BG}*{LABEL}+ {
 						bzero(label,256);
-						sscanf(yytext, " OUT %d , %s",&data1, label);
+						sscanf(yytext, " OUT %ld , %s",&data1, label);
 						printf("\n\t{unsigned char data;");
 						printf("\n\tdata = %s;",label);
-						printf("\n\tasm(\"outb %%0, $%d\": :\"a\"(data));}",integer1);
+						printf("\n\tasm(\"outb %%0, $%ld\": :\"a\"(data));}",longeger1);
 						}
 {BG}*IN{BG}*({DIGIT})+{BG}*[,]+{BG}*{LABEL}+ {
 						bzero(label,256);
-						sscanf(yytext, " IN %d , %s",&integer1, label);
+						sscanf(yytext, " IN %ld , %s",&longeger1, label);
 						printf("\n\t{unsigned char data;");
-						printf("\n\tasm(\"inb $%d, %%0;\":\"=a\"(data));",integer1);
+						printf("\n\tasm(\"inb $%ld, %%q0;\":\"=a\"(data));",longeger1);
 						printf("\n\t%s = data;}",label);
 					}
 {BG}*{LABEL}{BG}*:={BG}*RANDOM{BG}*[;]*    {
 					 bzero(label,256);
 					 sscanf(yytext," %s := RANDOM",label);
-					 { static int type;
-				         for (int i=0;i<tp;i++) {                                                                                                           
+				         for (long i=0;i<tp;i++) {                                                                                                           
                                                 if (strcmp(vars[i].label,label)==0) {                                                                                      
                                                         type = vars[i].type;                                                                                               
                                                         break;                                                                                                             
                                                 }                                                                                                                          
                                         } 
 					if (type==0) {  			
-						printf("\tasm\(\"1: pause; rdrand %%0; jae 1b;\":\"=r\"\(%s));\n",label);
-						//printf("\t%s=integer1;\n",label);
-					}
+						printf("\tasm\(\"1: pause; rdrand %%q0; jae 1b;\":\"=R\"\(%s));\n",label);
+						//printf("\t%s=longeger1;\n",label);
 					}
 				}                                                                                                                                                                             
 {BG}*YIELD{BG}*[;]*                  {                                                                                                                                                                              
@@ -78,8 +75,8 @@ out dx, al
 					bzero(label,256);
 					bzero(text1,256);
 					sscanf(yytext," %s := %*s %s", label, text1); 
-				 	static int type;       
-					for (int i=0;i<tp;i++) {
+				 	static long type;       
+					for (long i=0;i<tp;i++) {
                                                 if (strcmp(vars[i].label,label)==0) {
                                                         type = vars[i].type;                                                                                             
 							break;
@@ -103,13 +100,13 @@ out dx, al
 
 					bzero(label,256);
 					sscanf(yytext," OUTPUT %s", label);
-					for (int i=0;i<tp;i++) {
+					for (long i=0;i<tp;i++) {
 						if (strcmp(vars[i].label,label)==0) {
 							type = vars[i].type;
 							break;
 						}
 					}
-					if (type==0) printf("\n\tprintf\(\"%%d \", %s);\n",label);
+					if (type==0) printf("\n\tprintf\(\"%%ld \", %s);\n",label);
 					else if (type==1) printf("\n\tprintf\(\"%%s\", %s);\n",label);
 					else REJECT;
 				}
@@ -117,14 +114,14 @@ out dx, al
 {BG}*INPUT{BG}+{LABEL}+		{
 					bzero(label,256);
 					sscanf(yytext," INPUT %s", label);
-					int i;
+					long i;
 					for (i=0;i<tp;i++) {
 						if (strcmp(vars[i].label,label)==0) {					
 							type = vars[i].type;
 							break;
 						}
 					}
-					if (type==0) printf("\n\tscanf\(\"%%d\", &%s);\n",label);
+					if (type==0) printf("\n\tscanf\(\"%%ld\", &%s);\n",label);
 					else if (type==1) { 
 						printf("\n\tbzero(%s,256);\n",label);
 						printf("\n\tscanf\(\"%%s\",%s);\n",label);
@@ -137,7 +134,7 @@ out dx, al
 {BG}*INTEGER{BG}+{LABEL}+	{
 					bzero(label,256);
 					sscanf(yytext," INTEGER %s", label);
-					printf("static int %s;\n", label);
+					printf("static long %s;\n", label);
 					strcpy(vars[tp].label,label);
 					vars[tp++].type=0;
 				}
@@ -176,17 +173,17 @@ out dx, al
 {BG}*{LABEL}+{BG}+:={BG}+{INTEGER}{BG}*[;]*	{
 					bzero(text1,256);
 					bzero(text2,256);
-					sscanf(yytext, "%s := %d", text1, &integer1);
-					printf("\t%s=%d;\n",text1, integer1);
+					sscanf(yytext, "%s := %ld", text1, &longeger1);
+					printf("\t%s=%ld;\n",text1, longeger1);
 				}
 
 
 {BG}*{LABEL}+{BG}+:={BG}+{DENOTATION}+{BG}*[;]*	 	{
 							bzero(label,256);
 							bzero(text1,256);
-							int s = sscanf(yytext, " %s := \"%[^\"]\" )", label, text1);
+							long s = sscanf(yytext, " %s := \"%[^\"]\" )", label, text1);
 							if (s==2) printf("\tstrcpy(%s,\"%s\");", label, text1);
-							else printf("\t/* Error: parsed %d tokens %s*/\n",s, label);
+							else printf("\t/* Error: parsed %ld tokens %s*/\n",s, label);
 							}
 		
 {BG}*BEGIN		printf("{\n");
@@ -211,22 +208,22 @@ static char isofunct [] = R"(
  * @return True if the strings are isomorphic, false otherwise.               
  */                                                                           
 bool is_isomorphic(const char* s1, const char* s2) {                          
-   int len1 = strlen(s1);                                                     
-   int len2 = strlen(s2);                                                     
+   long len1 = strlen(s1);                                                     
+   long len2 = strlen(s2);                                                     
                                                                               
                                                                               
     // Use arrays as hash maps to store character mappings                    
     // Assuming ASCII characters, we can use an array of size 128 (or 256)    
-    static int map1[128] = {0}; // Maps characters from s1 to s2              
-    static int map2[128] = {0}; // Maps characters from s2 to s1 (to ensure on
+    static long map1[128] = {0}; // Maps characters from s1 to s2              
+    static long map2[128] = {0}; // Maps characters from s2 to s1 (to ensure on
                                                                               
-    static int leni;                                                          
+    static long leni;                                                          
                                                                               
     if (len1>len2) leni=len2;                                                 
     else leni=len1;                                                           
                                                                               
                                                                               
-    for (int i = 0; i < leni; i++) {                                          
+    for (long i = 0; i < leni; i++) {                                          
         char c1 = s1[i];                                                      
         char c2 = s2[i];                                                      
                                                                               
@@ -249,7 +246,7 @@ bool is_isomorphic(const char* s1, const char* s2) {
 
 })";
 
-int main(void) 
+long main(void) 
 {
 	printf("/* first Generated C code */\n");
 	printf("#include <stdlib.h>\n");
@@ -259,7 +256,7 @@ int main(void)
 	printf("#include <strings.h>\n");	
 //	printf("#include <sys/io.h>\n");	
 	printf("%s\n",isofunct);
-	printf("int main(void) {\n");
+	printf("long main(void) {\n");
 	yylex();
 	printf("	return(0);\n");
 	printf("}\n");	

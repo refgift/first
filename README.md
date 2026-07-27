@@ -27,14 +27,14 @@
 - Assignment of the COUNT of an assigned DENOTED to an INTEGER; See test5.fst
 
 # What Fails
-- test6.fst is how to reboot the system but fails due to lack of privilege
+- test6.fst fails to compile.
 - Assignment of literal INTEGER to VARIABLE: instead of A:=0; try A := 0;
 - In general, spaces are required between and betwixt the elements of the language.
 
 # Limits
 - 256 character length DENOTATIONS. This is due to an arbitrary choice.
-- INTEGER is signed 64 bit values.
-- RANDOM is signed 32 bit but will increase when fixed.
+- INTEGER is signed 128 bit values.
+- RANDOM is signed 128 bit values.
  
 # Examples
 - zdatest.fst prints random numbers assignment from word RANDOM works but on;y that.
