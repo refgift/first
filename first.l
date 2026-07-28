@@ -150,7 +150,7 @@ out dx, al
 					if (type==0) printf("\n\tscanf\(\"%%ld\", &%s);\n",label);
 					else if (type==1) { 
 						printf("\n\tbzero(%s,256);\n",label);
-						printf("\n\tscanf\(\"%%s\",%s);\n",label);
+						printf("\n\tscanf\(\"%%[^\\n]\",%s);\n",label);
 					}
 					else REJECT;
 
