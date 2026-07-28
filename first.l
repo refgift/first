@@ -10,7 +10,7 @@ DIGIT		[0-9]
 LETTER		[A-Z]
 INTEGER		[-]*[0-9]+
 ASSIGNER	[:][=]
-COLOR		RED|BLUE|GREEN|WHITE|BLACK|CLEAR|YELLOW|MAGENTA|CYAN
+COLOR		RED|BLUE|GREEN|WHITE|BLACK|CLEAR|YELLOW|MAGENTA|CYAN|BLANK
 %{
 
 #include <stdbool.h>
@@ -109,6 +109,7 @@ out dx, al
 					else if (strcmp(label,"CYAN")==0) printf("\n\tprintf(\"\033[36m\");");
 					else if (strcmp(label,"WHITE")==0) printf("\n\tprintf(\"\033[37m\");");
 					else if (strcmp(label,"BLACK")==0) printf("\n\tprintf(\"\033[30m\");");
+					else if (strcmp(label,"BLANK")==0) printf("\n\tprintf(\"\033[2J\033[1;1H\");");
 				}
 {BG}*OUTPUT{BG}+{LABEL}+	{
 

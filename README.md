@@ -25,6 +25,8 @@
 - ? symbol for isomorphic compare.
 - IN and OUT for byte sized port access  
 - Assignment of the COUNT of an assigned DENOTED to an INTEGER; See test5.fst
+- OUTPUT a color, reset of color, or clear and position at top left. test7.fst 
+  has the example.
 
 # What Fails
 - test6.fst fails to compile.
