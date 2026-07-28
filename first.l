@@ -147,10 +147,10 @@ out dx, al
 							break;
 						}
 					}
-					if (type==0) printf("\n\tscanf\(\"%%ld\", &%s);\n",label);
+					if (type==0) printf("\n\tif(scanf\(\"%%ld\", &%s)==EOF) return 0;",label);
 					else if (type==1) { 
 						printf("\n\tbzero(%s,256);\n",label);
-						printf("\n\tscanf\(\"%%[^\\n]\",%s);\n",label);
+						printf("\n\tif(scanf\(\"%%[^\\n]\",%s)==EOF) return 0;",label);
 					}
 					else REJECT;
 
@@ -174,8 +174,8 @@ out dx, al
 				}
 
 {BG}*IF{BG}*{LABEL}+{BG}*"?"+{BG}*{LABEL}+{BG}*THEN+	{
-					bzero(text1,256);					
-					bzero(text2,256);
+					//bzero(text1,256);					
+					//bzero(text2,256);
 					sscanf(yytext," IF %s ? %s THEN", text1, text2);
 					//printf("DEBUG: %s ? %s\n",text1, text2);
 					printf("\tif\(is_isomorphic\(%s,%s))\n",text1,text2);
@@ -188,7 +188,7 @@ out dx, al
 					if (strcmp(text2,"=")==0) strcpy(text2,"==");
 					printf("	if ( %s %s %s )", text1,text2,text3);
 				}
-{BG}*{LABEL}+{BG}*:={BG}*({LABEL}|{INTEGER})+{BG}*{ARITMETICS}+{BG}*({LABEL}|{INTEGER})+{BG}*[;]*;	{
+{BG}*{LABEL}+{BG}*:={BG}*({LABEL}|{INTEGER})+{BG}*{ARITMETICS}+{BG}*({LABEL}|{INTEGER})+	{
 					bzero(text1,256);
 					bzero(text2,256);
 					bzero(text3,256);
@@ -197,23 +197,23 @@ out dx, al
 					printf("\t%s=(long)%s%s(long)%s;\n",label,text1,text2,text3);
 					}
 
-{BG}*{LABEL}+{BG}+:={BG}+{INTEGER}{BG}*[;]*	{
+{BG}*{LABEL}+{BG}+:={BG}+{INTEGER}+	{
 					bzero(text1,256);
 					bzero(text2,256);
 					sscanf(yytext, "%s := %ld", text1, &longeger1);
 					printf("\t%s=%ld;\n",text1, longeger1);
 				}
-{BG}*{LABEL}+{BG}+:={BG}+{LABEL}{BG}*[;]*	{
+{BG}*{LABEL}+{BG}+:={BG}+{LABEL}+	{
 					bzero(text1,256);
 					bzero(text2,256);
 					sscanf(yytext, "%s := %s", text1, text2);
-					printf("\t%s=%s;\n",text1, text2);
+					printf("\n\tstrcpy(%s,%s);\n",text1, text2);
 					}
-{BG}*{LABEL}+{BG}+:={BG}+{DENOTATION}+{BG}*[;]*	 	{
+{BG}*{LABEL}+{BG}+:={BG}+{DENOTATION}+	 	{
 							bzero(label,256);
 							bzero(text1,256);
-							long s = sscanf(yytext, " %s := \"%[^\"]\" )", label, text1);
-							if (s==2) printf("\tstrcpy(%s,\"%s\");", label, text1);
+							long s = sscanf(yytext, " %s := \"%[^\"])", label, text1);
+							if (s==2) printf("\n\tstrcpy(%s,\"%s\");", label, text1);
 							else printf("\t/* Error: parsed %ld tokens %s*/\n",s, label);
 							}
 		
