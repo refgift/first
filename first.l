@@ -5,6 +5,7 @@ ARITMETICS	[&^|+-/*%]
 CONDITIONALS  	[<>!=]
 DENOTER		["]
 DENOTATION	["]+.+["]+
+SPACING		SPACE|TAB|NEWLINE|CR
 BOOLEAN		TRUE|FALSE
 DIGIT		[0-9]
 LETTER		[A-Z]
@@ -111,6 +112,16 @@ out dx, al
 					else if (strcmp(label,"BLACK")==0) printf("\n\tprintf(\"\033[30m\");");
 					else if (strcmp(label,"BLANK")==0) printf("\n\tprintf(\"\033[2J\033[1;1H\");");
 				}
+
+{BG}*OUTPUT{BG}+{SPACING}+	{
+					bzero(label,256);					
+					sscanf(yytext," OUTPUT %s", label);
+					if (strcmp(label,"SPACE")==0) printf("\n\tprintf(\" \");");
+					else if (strcmp(label,"TAB")==0) printf("\n\tprintf(\"\\t\");");
+					else if (strcmp(label,"NEWLINE")==0) printf("\n\tprintf(\"\\n\");");
+					else if (strcmp(label,"CR")==0) printf("\n\tprintf(\"\\r\");");
+				}
+
 {BG}*OUTPUT{BG}+{LABEL}+	{
 
 					bzero(label,256);
