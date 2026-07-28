@@ -188,13 +188,13 @@ out dx, al
 					if (strcmp(text2,"=")==0) strcpy(text2,"==");
 					printf("	if ( %s %s %s )", text1,text2,text3);
 				}
-{BG}*{LABEL}+{BG}*:={BG}*{LABEL}+{BG}*{ARITMETICS}+{BG}*({LABEL}|{INTEGER})+{BG}*[;]*;	{
+{BG}*{LABEL}+{BG}*:={BG}*({LABEL}|{INTEGER})+{BG}*{ARITMETICS}+{BG}*({LABEL}|{INTEGER})+{BG}*[;]*;	{
 					bzero(text1,256);
 					bzero(text2,256);
 					bzero(text3,256);
 					bzero(label,256);
 					sscanf(yytext, "%s := %s %s %s", label, text1, text2, text3);
-					printf("\t%s=%s%s%s;\n",label, text1,text2,text3);
+					printf("\t%s=%s%s%s;\n",label,text1,text2,text3);
 					}
 
 {BG}*{LABEL}+{BG}+:={BG}+{INTEGER}{BG}*[;]*	{

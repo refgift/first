@@ -27,6 +27,7 @@
 - Assignment of the COUNT of an assigned DENOTED to an INTEGER; See test5.fst
 - OUTPUT a color, reset of color, or clear and position at top left. test7.fst 
   has the example.
+- assignment with two integers with an arithmetic work. See pi.fst.
 
 # What Fails
 - test6.fst fails to compile.

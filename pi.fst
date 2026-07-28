@@ -1,0 +1,11 @@
+BEGIN
+
+	INTEGER PI;
+		
+	PI := 355 * 100000 ;
+	PI := PI / 113 ;
+
+	OUTPUT PI; 
+	OUTPUT NEWLINE;
+
+END
