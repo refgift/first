@@ -132,7 +132,7 @@ out dx, al
 							break;
 						}
 					}
-					if (type==0) printf("\n\tprintf\(\"%%ld \", %s);\n",label);
+					if (type==0) printf("\n\tprintf\(\"%%ld\", %s);\n",label);
 					else if (type==1) printf("\n\tprintf\(\"%%s\", %s);\n",label);
 					else REJECT;
 				}
@@ -147,10 +147,10 @@ out dx, al
 							break;
 						}
 					}
-					if (type==0) printf("\n\tif(scanf\(\"%%ld\", &%s)==EOF) return 0;",label);
+					if (type==0) printf("\n\tif(scanf\(\"%%ld \", &%s)==EOF) exit(0);",label);
 					else if (type==1) { 
-						printf("\n\tbzero(%s,256);\n",label);
-						printf("\n\tif(scanf\(\"%%[^\\n]\",%s)==EOF) return 0;",label);
+						//printf("\n\tbzero(%s,256);\n",label);
+						printf("\n\tif(scanf\(\"%%[^\\n] \",%s)==EOF) exit(0);",label);
 					}
 					else REJECT;
 
