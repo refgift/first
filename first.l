@@ -10,6 +10,7 @@ DIGIT		[0-9]
 LETTER		[A-Z]
 INTEGER		[-]*[0-9]+
 ASSIGNER	[:][=]
+COLOR		RED|BLUE|GREEN|WHITE|BLACK|CLEAR|YELLOW|MAGENTA|CYAN
 %{
 
 #include <stdbool.h>
@@ -96,6 +97,19 @@ out dx, al
 					printf("	printf\(\"%%s\",\" %s);\n",text1);
 					}
 
+{BG}*OUTPUT{BG}+{COLOR}+	{
+					bzero(label,256);					
+					sscanf(yytext," OUTPUT %s", label);
+					if (strcmp(label,"RED")==0) printf("\n\tprintf(\"\033[31m\");");
+					else if (strcmp(label,"CLEAR")==0) printf("\n\tprintf(\"\033[0m\");");
+					else if (strcmp(label,"BLUE")==0) printf("\n\tprintf(\"\033[34m\");");
+					else if (strcmp(label,"GREEN")==0) printf("\n\tprintf(\"\033[32m\");");
+					else if (strcmp(label,"YELLOW")==0) printf("\n\tprintf(\"\033[33m\");");
+					else if (strcmp(label,"MAGENTA")==0) printf("\n\tprintf(\"\033[35m\");");
+					else if (strcmp(label,"CYAN")==0) printf("\n\tprintf(\"\033[36m\");");
+					else if (strcmp(label,"WHITE")==0) printf("\n\tprintf(\"\033[37m\");");
+					else if (strcmp(label,"BLACK")==0) printf("\n\tprintf(\"\033[30m\");");
+				}
 {BG}*OUTPUT{BG}+{LABEL}+	{
 
 					bzero(label,256);

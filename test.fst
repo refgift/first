@@ -8,8 +8,10 @@ HERE:
 	OUTPUT "\nEnter integer B\n";
 	INPUT B;
 	C := A + B;
+	OUTPUT RED;
 	OUTPUT "\nC = A + B\n";
 	OUTPUT C;
+	OUTPUT CLEAR;
 	IF C > 9 THEN GOTO HERE;
 	OUTPUT "\nEnded.\n"
 END
