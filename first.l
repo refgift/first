@@ -194,7 +194,7 @@ out dx, al
 					bzero(text3,256);
 					bzero(label,256);
 					sscanf(yytext, "%s := %s %s %s", label, text1, text2, text3);
-					printf("\t%s=%s%s%s;\n",label,text1,text2,text3);
+					printf("\t%s=(long)%s%s(long)%s;\n",label,text1,text2,text3);
 					}
 
 {BG}*{LABEL}+{BG}+:={BG}+{INTEGER}{BG}*[;]*	{
