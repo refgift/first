@@ -22,11 +22,11 @@
 - YIELD operator for CPU scheduling for goto loops that are too tight.
 - RANDOM operator for clean random from the CPU
 - INPUT and OUTPUT for standard input and output for literals and variables.
-- ? symbol for isomorphic compare.
-- IN and OUT for byte sized port access  
+- RETURN for return a small integer result to the Operating System. See zdatest.fst.
+- ? symbol for isomorphic compare.  
 - Assignment of the COUNT of an assigned DENOTED to an INTEGER; See test5.fst
-- OUTPUT a color, reset of color, or clear and position at top left. test7.fst 
-  has the example.
+- OUTPUT a color, reset of color, or clear and position at top left. 
+  test7.fst  has the example.
 - assignment with two integers with an arithmetic work. See pi.fst.
 
 # What Fails
@@ -38,16 +38,17 @@
 - 256 character length DENOTATIONS. This is due to an arbitrary choice.
 - INTEGER is signed 128 bit values.
 - RANDOM is signed 128 bit values.
+- RETURN is operating system dependent.
  
 # Examples
-- zdatest.fst prints random numbers assignment from word RANDOM works but on;y that.
+- zdatest.fst returns a random integer.
 - ./first < zdatest.fst | cc -x c - -o zdatest
 - Other examples are similar
 
 # zda - A reality control, a work in progress.
-- zda.fst is the first source
+- zda.fst is a first source
 - The purpose is to out others that have a zero score.
 - The compile procedure: ./first < zda.fst  | cc -o zda -x c -
-- Run it and see it run with top utility.
+- Run it and see it run with the top utility.
 
 

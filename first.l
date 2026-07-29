@@ -23,6 +23,7 @@ COLOR		RED|BLUE|GREEN|WHITE|BLACK|CLEAR|YELLOW|MAGENTA|CYAN|BLANK
 	static char text4[256];
 	static long longeger1;
 	unsigned char data1;
+	static int linenum;
 
 	struct types {
 		char label[256];
@@ -55,7 +56,7 @@ out dx, al
 						printf("\n\tasm(\"inb $%ld, %%q0;\":\"=a\"(data));",longeger1);
 						printf("\n\t%s = data;}",label);
 					}
-{BG}*{LABEL}{BG}*:={BG}*RANDOM{BG}*[;]*    {
+{BG}*{LABEL}{BG}*:={BG}*RANDOM+         {
 					 bzero(label,256);
 					 sscanf(yytext," %s := RANDOM",label);
 				         for (long i=0;i<tp;i++) {                                                                                                           
@@ -67,9 +68,11 @@ out dx, al
 					if (type==0) {  			
 						printf("\tasm\(\"1: pause; rdrand %%q0; jae 1b;\":\"=R\"\(%s));\n",label);
 						//printf("\t%s=longeger1;\n",label);
+					} else {
+						fprintf(stderr,"Error at line %d RANDOM needs INTEGER for assign to.\n", linenum);
 					}
 				}                                                                                                                                                                             
-{BG}*YIELD{BG}*[;]*                  {                                                                                                                                                                              
+{BG}*YIELD+                  {                                                                                                                                                                              
                                         printf("\n\tasm\(\"pause;\");\n");                                                                                                                                     
                                 } 
 
@@ -203,11 +206,19 @@ out dx, al
 					sscanf(yytext, "%s := %ld", text1, &longeger1);
 					printf("\t%s=%ld;\n",text1, longeger1);
 				}
-{BG}*{LABEL}+{BG}+:={BG}+{LABEL}+	{
+{BG}*{LABEL}+{BG}*:={BG}*{LABEL}+	{
 					bzero(text1,256);
-					bzero(text2,256);
-					sscanf(yytext, "%s := %s", text1, text2);
-					printf("\n\tstrcpy(%s,%s);\n",text1, text2);
+					bzero(label,256);
+					sscanf(yytext, "%s := %s", text1, label);
+					for (long i=0;i<tp;i++) {
+						if (strcmp(vars[i].label,label)==0) {
+							type = vars[i].type;
+							break;
+						}
+					}
+					if (type==0) printf("\n\t%s=%s;",text1, label);
+					else if (type==1) printf("\n\tstrcpy(%s,%s);",text1, label);
+					else REJECT;
 					}
 {BG}*{LABEL}+{BG}+:={BG}+{DENOTATION}+	 	{
 							bzero(label,256);
@@ -224,11 +235,17 @@ out dx, al
 				sscanf(yytext," GOTO %s", label); 
 				printf("	goto %s;\n", label); 
 			}
+{BG}*RETURN{BG}+{LABEL}+	{
+				bzero(label,256);
+				sscanf(yytext," RETURN %s", label); 
+				printf("\n\texit(%s);", label); 
+				} 
 ^{LABELDECL}+		printf("\n%s",yytext);
-{BG}*			;
-";"			;
+[\n]+			linenum++; ECHO;
+[ \t]+			ECHO;
+[;]+			;
 .			printf("?");
-\x04			;
+
 %%
 
 static char isofunct [] = R"(
