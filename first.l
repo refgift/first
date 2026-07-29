@@ -235,7 +235,7 @@ out dx, al
 				sscanf(yytext," GOTO %s", label); 
 				printf("	goto %s;\n", label); 
 			}
-{BG}*RETURN{BG}+{LABEL}+	{
+{BG}*RETURN{BG}+({LABEL}|{INTEGER})+	{
 				bzero(label,256);
 				sscanf(yytext," RETURN %s", label); 
 				printf("\n\texit(%s);", label); 
