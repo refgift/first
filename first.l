@@ -150,10 +150,10 @@ out dx, al
 							break;
 						}
 					}
-					if (type==0) printf("\n\tif(scanf\(\"%%ld \", &%s)==EOF) exit(0);",label);
+					if (type==0) printf("\n\tif(scanf\(\"%%ld\", &%s)==EOF) exit(0);",label);
 					else if (type==1) { 
 						//printf("\n\tbzero(%s,256);\n",label);
-						printf("\n\tif(scanf\(\"%%[^\\n] \",%s)==EOF) exit(0);",label);
+						printf("\n\tif(scanf\(\"%%[^\\n]\",%s)==EOF) exit(0);",label);
 					}
 					else REJECT;
 
