@@ -8,20 +8,17 @@ BEGIN
 S:	IF A ? B  THEN 
 	BEGIN
 		OUTPUT "Match";
+		OUTPUT SPACE;
 		OUTPUT A;
+		OUTPUT SPACE;
 		OUTPUT B;
-		OUTPUT "\n"
+		OUTPUT NEWLINE
 	END;
 	OUTPUT "\nEnter Text Patterns a and b\n";
 	INPUT A;
-	OUTPUT A;
 	INPUT B;
-	OUTPUT B;
 	YIELD ;
-	IF A ? QUIT THEN
-	BEGIN
-		GOTO T;
-	END 
+	IF A ? QUIT THEN GOTO T;
 	GOTO S;
 T:	OUTPUT "\nEnded\n";
 END
