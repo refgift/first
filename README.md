@@ -4,6 +4,7 @@
 - Started June 2026, expect daily progress, maybe weekly.
 - Test programs to show translation to C programs that compile and run.
 - very simple subset of the ALGOL language without the complexity.
+- If you overcometh look-at-fear, your human intelligence can program first programs
 
 # Build
 - flex -8 first.l
