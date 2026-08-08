@@ -1,16 +1,18 @@
 BEGIN
         DENOTED TITLE;
-	TITLE := "TEST 3 : Words\n";
+	TITLE := "TEST 3 : Words";
         OUTPUT TITLE;
+	OUTPUT NEWLINE
 	DENOTED A;
 	DENOTED QUIT;
 	QUIT := "blank";
 
 LOOP:	INPUT A;    
         OUTPUT A;
-	OUTPUT "\t";
+	OUTPUT TAB;
 	YIELD;
-	IF A ? QUIT THEN GOTO FINIS; 
+	IF A ? QUIT THEN GOTO FINIS;
+	A := " ";
 	GOTO LOOP;
 
 FINIS:  OUTPUT "\n"
