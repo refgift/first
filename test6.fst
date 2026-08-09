@@ -6,5 +6,5 @@ BEGIN
 	
 	Y := X | 1;
 	
-	OUT 146, Y ;  
+	OUT 146 , Y ;  
 END

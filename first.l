@@ -47,14 +47,14 @@ out dx, al
 						sscanf(yytext, " OUT %ld , %s",&data1, label);
 						printf("\n\t{unsigned char data;");
 						printf("\n\tdata = %s;",label);
-						printf("\n\tasm(\"outb %%0, $%ld\": :\"a\"(data));}",longeger1);
+						printf("\n\tasm(\"outb %%0, $%d\": :\"a\"(data));\n}",data1);
 						}
 {BG}*IN{BG}*({DIGIT})+{BG}*[,]+{BG}*{LABEL}+ {
 						bzero(label,256);
-						sscanf(yytext, " IN %ld , %s",&longeger1, label);
+						sscanf(yytext, " IN %d , %s",&data1, label);
 						printf("\n\t{unsigned char data;");
-						printf("\n\tasm(\"inb $%ld, %%q0;\":\"=a\"(data));",longeger1);
-						printf("\n\t%s = data;}",label);
+						printf("\n\tasm(\"inb $%d, %%0;\":\"=a\"(data));",data1);
+						printf("\n\t%s = data;\n}",label);
 					}
 {BG}*{LABEL}{BG}*:={BG}*RANDOM+         {
 					 bzero(label,256);
@@ -97,9 +97,9 @@ out dx, al
 
 {BG}*OUTPUT{BG}+\".+\"		{
 					bzero(text1,256);
-					sscanf(yytext," OUTPUT \"%256c\"", text1);
-					printf("	printf\(\"%%s\",\" %s);\n",text1);
-					}
+					sscanf(yytext," OUTPUT %256c", text1);
+					printf("	printf\(\"%%s\",%s);\n",text1);
+				}
 
 {BG}*OUTPUT{BG}+{COLOR}+	{
 					bzero(label,256);					
