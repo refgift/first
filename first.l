@@ -91,10 +91,7 @@ out dx, al
 						printf("\n\t%s = strlen(%s); ", label, text1);
 					}
 				}
-					
-
-
-
+	
 {BG}*OUTPUT{BG}+\".+\"		{
 					bzero(text1,256);
 					sscanf(yytext," OUTPUT \"%256c\"", text1);
@@ -126,19 +123,25 @@ out dx, al
 				}
 
 {BG}*OUTPUT{BG}+{LABEL}+	{
+				bzero(label,256);
 
-					bzero(label,256);
-					sscanf(yytext," OUTPUT %s", label);
-					for (long i=0;i<tp;i++) {
-						if (strcmp(vars[i].label,label)==0) {
-							type = vars[i].type;
-							break;
-						}
+				int scnd = sscanf(yytext," OUTPUT %s", label);
+				for (long i=0;i<tp;i++) {
+					if (strcmp(vars[i].label,label)==0) {
+						type = vars[i].type;
+						break;
 					}
-					if (type==0) printf("\n\tprintf\(\"%%ld\", %s);\n",label);
-					else if (type==1) printf("\n\tprintf\(\"%%s\", %s);\n",label);
-					else REJECT;
 				}
+				if (type==0) printf("\n\tprintf\(\"%%ld\", %s);\n",label);
+				else if (type==1) printf("\n\tprintf\(\"%%s\", %s);\n",label);
+				}
+
+{BG}*OUTPUT{BG}+COUNT+{BG}+{LABEL}+	{
+					bzero(label,256);
+					sscanf(yytext," OUTPUT %*s %s", label);
+					int len = strlen(label);
+					printf("\n\tprintf\(\"%%ld\", %d);", len);
+					}
 
 {BG}*INPUT{BG}+{LABEL}+		{
 					bzero(label,256);
@@ -153,7 +156,7 @@ out dx, al
 					if (type==0) printf("\n\tif(scanf\(\"%%ld\", &%s)==EOF) exit(0);",label);
 					else if (type==1) { 
 						//printf("\n\tbzero(%s,256);\n",label);
-						printf("\n\tif(scanf\(\"%%[^\\n]\",%s)==EOF) exit(0); getchar();",label);
+						printf("\n\tif(scanf\(\"%%s\",%s)==EOF) exit(0);",label);
 					}
 					else REJECT;
 

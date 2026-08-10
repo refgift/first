@@ -16,7 +16,9 @@ S:	IF A ? B  THEN
 	END;
 	OUTPUT "\nEnter Text Patterns a and b\n";
 	INPUT A;
+	OUTPUT COUNT A;
 	INPUT B;
+	OUTPUT COUNT B;
 	YIELD ;
 	IF A ? QUIT THEN GOTO T;
 	GOTO S;
