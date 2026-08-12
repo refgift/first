@@ -29,6 +29,7 @@
 - OUTPUT a color, reset of color, or clear and position at top left. 
   test7.fst  has the example.
 - assignment with two integers with an arithmetic work. See pi.fst.
+- JUMP label or GOTO label; where a label left justified and ending with a colon is labeled.
 
 # What Fails
 - test6.fst fails to compile.

@@ -230,9 +230,9 @@ out dx, al
 		
 {BG}*BEGIN		printf("{\n");
 {BG}*END		printf("}\n");
-{BG}*GOTO{BG}+{LABEL}+	{ 
+{BG}*(GOTO|JUMP)+{BG}+{LABEL}+	{ 
 				bzero(label,256);
-				sscanf(yytext," GOTO %s", label); 
+				sscanf(yytext," %*s %s", label); 
 				printf("	goto %s;\n", label); 
 			}
 {BG}*RETURN{BG}+({LABEL}|{INTEGER})+	{
