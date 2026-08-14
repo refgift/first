@@ -1,4 +1,5 @@
 # FIRST - A process language. 
+- Author Larry B. Daniel
 - Procedures belong to the operating system.
 - The language goal is to translate math into the computer.
 - Started June 2026, expect daily progress, maybe weekly.
@@ -30,9 +31,8 @@
   test7.fst  has the example.
 - assignment with two integers with an arithmetic work. See pi.fst.
 - JUMP label or GOTO label; where a label left justified and ending with a colon is labeled.
-
+- test6. compiles but gets the runtime error due to ring 3 instead of ring 0, still TBD.
 # What Fails
-- test6.fst fails to compile.
 - Assignment of literal INTEGER to VARIABLE: instead of A:=0; try A := 0;
 - In general, spaces are required between and betwixt the elements of the language.
 
