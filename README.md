@@ -8,6 +8,7 @@
 - If you overcometh look-at-fear, your human intelligence can program first programs
 
 # Build
+- Get flex and make it: https://github.com/westes/flex
 - flex -8 first.l
 - cc lex.yy.c -o first -lfl
 - ./first < test.fst > test.c 
