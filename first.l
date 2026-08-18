@@ -155,7 +155,7 @@ out dx, al
 					if (type==0) printf("\n\tif(scanf\(\"%%ld\", &%s)==EOF) exit(0);",label);
 					else if (type==1) { 
 						//printf("\n\tbzero(%s,256);\n",label);
-						printf("\n\tif(scanf\(\"%%s\",%s)==EOF) exit(0);",label);
+						printf("\n\tif(scanf\(\"%%256c\",%s)==EOF) exit(0);",label);
 					}
 					else REJECT;
 
