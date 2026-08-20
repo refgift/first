@@ -1,25 +1,28 @@
 BEGIN
 	DENOTED A;
 	DENOTED B;
-	DENOTED QUIT;
-	QUIT := "BLANK";
+
+
 	A := "title";
 	B := "paper";
 S:	IF A ? B  THEN 
 	BEGIN
-		OUTPUT "Match";
-		OUTPUT SPACE;
 		OUTPUT A;
+		OUTPUT SPACE;
+		OUTPUT "matches"
 		OUTPUT SPACE;
 		OUTPUT B;
 		OUTPUT NEWLINE
 	END;
 	OUTPUT "\nEnter Text Patterns a and b\n";
 	INPUT A;
+	OUTPUT COUNT A;
+	OUTPUT TAB;
 	INPUT B;
+	OUTPUT COUNT B;
+	OUTPUT TAB;
 	YIELD ;
-	IF A ? QUIT THEN GOTO T;
 	GOTO S;
-T:	OUTPUT "\nEnded\n";
+
 END
 

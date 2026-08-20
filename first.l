@@ -93,10 +93,7 @@ out dx, al
 						printf("\n\t%s = strlen(%s); ", label, text1);
 					}
 				}
-					
-
-
-
+	
 {BG}*OUTPUT{BG}+\".+\"		{
 					bzero(text1,256);
 					sscanf(yytext," OUTPUT %256c", text1);
@@ -128,19 +125,24 @@ out dx, al
 				}
 
 {BG}*OUTPUT{BG}+{LABEL}+	{
+				bzero(label,256);
 
-					bzero(label,256);
-					sscanf(yytext," OUTPUT %s", label);
-					for (long i=0;i<tp;i++) {
-						if (strcmp(vars[i].label,label)==0) {
-							type = vars[i].type;
-							break;
-						}
+				int scnd = sscanf(yytext," OUTPUT %s", label);
+				for (long i=0;i<tp;i++) {
+					if (strcmp(vars[i].label,label)==0) {
+						type = vars[i].type;
+						break;
 					}
-					if (type==0) printf("\n\tprintf\(\"%%ld\", %s);\n",label);
-					else if (type==1) printf("\n\tprintf\(\"%%s\", %s);\n",label);
-					else REJECT;
 				}
+				if (type==0) printf("\n\tprintf\(\"%%ld\", %s);\n",label);
+				else if (type==1) printf("\n\tprintf\(\"%%s\", %s);\n",label);
+				}
+
+{BG}*OUTPUT{BG}+COUNT+{BG}+{LABEL}+	{
+					bzero(label,256);
+					sscanf(yytext," OUTPUT %*s %s", label);
+					printf("\n\tprintf\(\"%%ld\", strlen(%s));", label);
+					}
 
 {BG}*INPUT{BG}+{LABEL}+		{
 					bzero(label,256);
@@ -155,7 +157,7 @@ out dx, al
 					if (type==0) printf("\n\tif(scanf\(\"%%ld\", &%s)==EOF) exit(0);",label);
 					else if (type==1) { 
 						//printf("\n\tbzero(%s,256);\n",label);
-						printf("\n\tif(scanf\(\"%%[^\\n]\",%s)==EOF) exit(0); getchar();",label);
+						printf("\n\tif(scanf\(\"%%256c\",%s)==EOF) exit(0);",label);
 					}
 					else REJECT;
 
@@ -264,9 +266,12 @@ bool is_isomorphic(const char* s1, const char* s2) {
                                                                               
     // Use arrays as hash maps to store character mappings                    
     // Assuming ASCII characters, we can use an array of size 128 (or 256)    
-    static long map1[128] = {0}; // Maps characters from s1 to s2              
-    static long map2[128] = {0}; // Maps characters from s2 to s1 (to ensure on
-                                                                              
+    static long map1[128]; // Maps characters from s1 to s2              
+    static long map2[128]; // Maps characters from s2 to s1 (to ensure on
+                         
+    bzero(map1,128*8);
+    bzero(map2,128*8);
+
     static long leni;                                                          
                                                                               
     if (len1>len2) leni=len2;                                                 
