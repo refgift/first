@@ -32,7 +32,7 @@
   test7.fst  has the example.
 - assignment with two integers with an arithmetic work. See pi.fst.
 - JUMP label or GOTO label; where a label left justified and ending with a colon is labeled.
-- test6. compiles but gets the runtime error due to ring 3 instead of ring 0, still TBD.
+- IN and OUT use Linux iopl(3) so inb/outb run in ring 3. Needs root or CAP_SYS_RAWIO. See test6.fst.
 # What Fails
 - Assignment of literal INTEGER to VARIABLE: instead of A:=0; try A := 0;
 - In general, spaces are required between and betwixt the elements of the language.

@@ -22,7 +22,7 @@ COLOR		RED|BLUE|GREEN|WHITE|BLACK|CLEAR|YELLOW|MAGENTA|CYAN|BLANK
 	static char text3[256];
 	static char text4[256];
 	static long longeger1;
-	unsigned char data1;
+	static int port;
 	static int linenum;
 
 	struct types {
@@ -42,18 +42,20 @@ out dx, al
 %}
 
 %%
-{BG}*OUT{BG}*({DIGIT})+{BG}*[,]+{BG}*{LABEL}+ {
+{BG}*OUT{BG}*({DIGIT}|{LABEL})+{BG}*[,]+{BG}*({DIGIT}|{LABEL})+ {
 						bzero(label,256);
-						sscanf(yytext, " OUT %ld , %s",&data1, label);
+						sscanf(yytext, " OUT %d , %s",&port, label);
 						printf("\n\t{unsigned char data;");
+						printf("\n\tfirst_iopl();");
 						printf("\n\tdata = %s;",label);
-						printf("\n\tasm(\"outb %%0, $%d\": :\"a\"(data));\n}",data1);
+						printf("\n\tasm(\"mov $%d,%%%%dx; out %%0,(%%%%dx);\": :\"a\"(data));\n}",port);
 						}
 {BG}*IN{BG}*({DIGIT})+{BG}*[,]+{BG}*{LABEL}+ {
 						bzero(label,256);
-						sscanf(yytext, " IN %d , %s",&data1, label);
+						sscanf(yytext, " IN %d , %s",&port, label);
 						printf("\n\t{unsigned char data;");
-						printf("\n\tasm(\"inb $%d, %%0;\":\"=a\"(data));",data1);
+						printf("\n\tfirst_iopl();");
+						printf("\n\tasm(\"inb $%d, %%0;\":\"=a\"(data));",port);
 						printf("\n\t%s = data;\n}",label);
 					}
 {BG}*{LABEL}{BG}*:={BG}*RANDOM+         {
@@ -301,9 +303,22 @@ long main(void)
 	printf("#include <stdio.h>\n");
 	printf("#include <string.h>\n");	
 	printf("#include <stdbool.h>\n");	
-	printf("#include <strings.h>\n");	
-//	printf("#include <sys/io.h>\n");	
+	printf("#include <strings.h>\n");
+	printf("#ifdef __linux__\n");
+	printf("#include <sys/io.h>\n");
+	printf("#endif\n");
 	printf("%s\n",isofunct);
+	printf("static void first_iopl(void) {\n");
+	printf("\tstatic int once;\n");
+	printf("\tif (once) return;\n");
+	printf("\tonce = 1;\n");
+	printf("#ifdef __linux__\n");
+	printf("\tif (iopl(3) < 0) { perror(\"iopl\"); exit(1); }\n");
+	printf("#else\n");
+	printf("\tfprintf(stderr, \"IN/OUT need Linux iopl\\n\");\n");
+	printf("\texit(1);\n");
+	printf("#endif\n");
+	printf("}\n");
 	printf("long main(void) {\n");
 	yylex();
 	printf("	return(0);\n");

@@ -12,8 +12,8 @@ First is a minimalist, assembly-like language designed for learning low-level pr
     *   **DENOTED:** Character string variables. Declared using `DENOTED variable_name`.  Example: `DENOTED message`.
 *   **Assignment:** The assignment operator is `:=`. Example: `counter := 10`.
 *   **Input/Output:**
-    *   `IN digit , label`:  Reads a byte from the specified I/O port (digit) and stores it in the variable `label`.
-    *   `OUT digit , label`:  Writes the value of the variable `label` to the specified I/O port (digit).
+    *   `IN digit , label`:  Reads a byte from the specified I/O port (digit) and stores it in the variable `label`. Linux only; the program calls `iopl(3)` and must run as root or with `CAP_SYS_RAWIO`.
+    *   `OUT digit , label`:  Writes the value of the variable `label` to the specified I/O port (digit). Same privilege as `IN`.
     *   `OUTPUT "string"`: Outputs a string literal to the console.
     *   `OUTPUT variable`:  Outputs the value of a variable to the console.
     *   `OUTPUT SPACE`, `OUTPUT TAB`, `OUTPUT NEWLINE`, `OUTPUT CR`:  Outputs whitespace characters.
