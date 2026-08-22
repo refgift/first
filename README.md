@@ -26,7 +26,8 @@
 - RANDOM operator for clean random from the CPU
 - INPUT and OUTPUT for standard input and output for literals and variables.
 - RETURN for return a small integer result to the Operating System. See zdatest.fst.
-- ? symbol for isomorphic compare.  
+- ? symbol for isomorphic compare.
+- ~ symbol for homomorphic compare.
 - Assignment of the COUNT of an assigned DENOTED to an INTEGER; See test5.fst
 - OUTPUT a color, reset of color, or clear and position at top left. 
   test7.fst  has the example.

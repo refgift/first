@@ -187,6 +187,10 @@ out dx, al
 					//printf("DEBUG: %s ? %s\n",text1, text2);
 					printf("\tif\(is_isomorphic\(%s,%s))\n",text1,text2);
 					}
+{BG}*IF{BG}*{LABEL}+{BG}*"~"+{BG}*{LABEL}+{BG}*THEN+	{
+					sscanf(yytext," IF %s ~ %s THEN", text1, text2);
+					printf("\tif\(is_homomorphic\(%s,%s))\n",text1,text2);
+					}
 {BG}*IF{BG}*.+{BG}*THEN+	{
 					bzero(text1,256);
 					bzero(text2,256);
@@ -296,9 +300,29 @@ bool is_isomorphic(const char* s1, const char* s2) {
             return false; // Ensures one-to-one mapping                       
         }                                                                     
     }                                                                         
-                                                                              
+                                                                               
     return true;                                                              
 
+}
+
+bool is_homomorphic(const char* s1, const char* s2) {
+   long len1 = strlen(s1);
+   long len2 = strlen(s2);
+    static long map1[128];
+    bzero(map1,128*8);
+    static long leni;
+    if (len1>len2) leni=len2;
+    else leni=len1;
+    for (long i = 0; i < leni; i++) {
+        char c1 = s1[i];
+        char c2 = s2[i];
+        if (map1[c1] == 0) {
+            map1[c1] = c2;
+        } else if (map1[c1] != c2) {
+            return false;
+        }
+    }
+    return true;
 })";
 
 long main(void) 
