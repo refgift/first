@@ -5,6 +5,7 @@ BEGIN
 
 	A := "title";
 	B := "paper";
+
 S:	IF A ? B  THEN 
 	BEGIN
 		OUTPUT A;
@@ -14,14 +15,10 @@ S:	IF A ? B  THEN
 		OUTPUT B;
 		OUTPUT NEWLINE
 	END;
-	OUTPUT "\nEnter Text Patterns a and b\n";
+	OUTPUT "Enter Text Patterns a and b";
+	OUTPUT NEWLINE;
 	INPUT A;
-	OUTPUT COUNT A;
-	OUTPUT TAB;
 	INPUT B;
-	OUTPUT COUNT B;
-	OUTPUT TAB;
-	YIELD ;
 	GOTO S;
 
 END

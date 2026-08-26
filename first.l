@@ -157,7 +157,7 @@ out dx, al
 					if (type==0) printf("\n\tif(scanf\(\"%%ld\", &%s)==EOF) exit(0);",label);
 					else if (type==1) { 
 						//printf("\n\tbzero(%s,256);\n",label);
-						printf("\n\tif(scanf\(\"%%256c\",%s)==EOF) exit(0);",label);
+						printf("\n\tif(scanf\(\" %%256[^\\n] \",%s)==EOF) exit(0);",label);
 					}
 					else REJECT;
 
@@ -185,11 +185,11 @@ out dx, al
 					//bzero(text2,256);
 					sscanf(yytext," IF %s ? %s THEN", text1, text2);
 					//printf("DEBUG: %s ? %s\n",text1, text2);
-					printf("\tif\(is_isomorphic\(%s,%s))\n",text1,text2);
+					printf("\n\tif\(is_isomorphic\(%s,%s))",text1,text2);
 					}
 {BG}*IF{BG}*{LABEL}+{BG}*"~"+{BG}*{LABEL}+{BG}*THEN+	{
 					sscanf(yytext," IF %s ~ %s THEN", text1, text2);
-					printf("\tif\(is_homomorphic\(%s,%s))\n",text1,text2);
+					printf("\n\tif\(is_homomorphic\(%s,%s))",text1,text2);
 					}
 {BG}*IF{BG}*.+{BG}*THEN+	{
 					bzero(text1,256);
