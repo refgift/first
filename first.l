@@ -24,7 +24,7 @@ COLOR		RED|BLUE|GREEN|WHITE|BLACK|CLEAR|YELLOW|MAGENTA|CYAN|BLANK
 	static long longeger1;
 	static int port;
 	static int linenum;
-
+	static char c;
 	struct types {
 		char label[256];
 		long type;
@@ -163,7 +163,16 @@ out dx, al
 
 
 				}
-
+{BG}*GET{BG}+{LABEL}+		{
+  					bzero(label,256);
+                                        sscanf(yytext," GET %s", label);
+                                        printf("\n\t%s=getchar();\n\tif (%s==EOF) return(0);",label);
+				}
+{BG}*PUT{BG}+{LABEL}+           {
+	                                bzero(label,256);
+	                                sscanf(yytext," PUT %s", label);
+	                                printf("\n\tputchar(%s);",label);
+	                        }
 {BG}*INTEGER{BG}+{LABEL}+	{
 					bzero(label,256);
 					sscanf(yytext," INTEGER %s", label);

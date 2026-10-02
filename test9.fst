@@ -1,0 +1,16 @@
+BEGIN
+	INTEGER N;
+	INTEGER T;
+	N := 10;
+	T := 8;
+	INTEGER C;
+S1: 	YIELD ;
+	GET C;
+	IF C = N THEN 
+	BEGIN
+		GET C;
+		IF C = T THEN JUMP S1;
+	END
+	PUT C;
+	JUMP S1;
+END
