@@ -35,6 +35,7 @@
 - JUMP label or GOTO label; where a label left justified and ending with a colon is labeled.
 - IN and OUT use Linux iopl(3) so inb/outb run in ring 3. Needs root or CAP_SYS_RAWIO. See test6.fst.
 - GET and PUT get or put a character with an INTEGER label. test9.fst is example 
+- TIMED with INTEGER will delay that many microseconds. See zda.fst for example
 # What Fails
 - Assignment of literal INTEGER to VARIABLE: instead of A:=0; try A := 0;
 - In general, spaces are required between and betwixt the elements of the language.
