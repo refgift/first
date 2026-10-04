@@ -163,6 +163,11 @@ out dx, al
 
 
 				}
+{BG}*TIMED{BG}+{LABEL}+		{
+  								bzero(label,256);
+                                sscanf(yytext," TIMED %s", label);
+                                printf("\n\tusleep(%s);",label);
+				}				
 {BG}*GET{BG}+{LABEL}+		{
   					bzero(label,256);
                                         sscanf(yytext," GET %s", label);
@@ -338,6 +343,7 @@ long main(void)
 {
 	printf("/* first Generated C code */\n");
 	printf("#include <stdlib.h>\n");
+	printf("#include <unistd.h>\n");
 	printf("#include <stdio.h>\n");
 	printf("#include <string.h>\n");	
 	printf("#include <stdbool.h>\n");	
