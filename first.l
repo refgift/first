@@ -46,15 +46,15 @@ out dx, al
 						bzero(label,256);
 						sscanf(yytext, " OUT %d , %s",&port, label);
 						printf("\n\t{unsigned char data;");
-						printf("\n\tfirst_iopl();");
+						printf("\n\tunsigned short port;");
 						printf("\n\tdata = %s;",label);
-						printf("\n\tasm(\"mov $%d,%%%%dx; out %%0,(%%%%dx);\": :\"a\"(data));\n}",port);
+						printf("\n\tport = %d;",port);
+						printf("\n\tasm(\"out %%0,%%1;\"::\"a\"\(data),\"r\"\(port));\n}\n");
 						}
 {BG}*IN{BG}*({DIGIT})+{BG}*[,]+{BG}*{LABEL}+ {
 						bzero(label,256);
 						sscanf(yytext, " IN %d , %s",&port, label);
 						printf("\n\t{unsigned char data;");
-						printf("\n\tfirst_iopl();");
 						printf("\n\tasm(\"inb $%d, %%0;\":\"=a\"(data));",port);
 						printf("\n\t%s = data;\n}",label);
 					}
@@ -90,7 +90,7 @@ out dx, al
 						}
 					}
 					if (type == 0) { 
-						printf("\n\t%s = strlen(%s); ", label, text1);
+						printf("\n\t%s = strlen\(%s);", label, text1);
 					}
 				}
 	
@@ -358,9 +358,6 @@ long main(void)
 	printf("\tonce = 1;\n");
 	printf("#ifdef __linux__\n");
 	printf("\tif (iopl(3) < 0) { perror(\"iopl\"); exit(1); }\n");
-	printf("#else\n");
-	printf("\tfprintf(stderr, \"IN/OUT need Linux iopl\\n\");\n");
-	printf("\texit(1);\n");
 	printf("#endif\n");
 	printf("}\n");
 	printf("long main(void) {\n");
