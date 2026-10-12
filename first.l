@@ -15,6 +15,7 @@ COLOR		RED|BLUE|GREEN|WHITE|BLACK|CLEAR|YELLOW|MAGENTA|CYAN|BLANK
 %{
 
 #include <stdbool.h>
+#include <strings.h>
 	
 	static char label[256];
 	static char text1[256];
@@ -67,18 +68,8 @@ out dx, al
 	                                          break;
 	                                    }
 	                                }
-	                                /*
-	                                reduce: cmp     $9,%rax
-	                                        jl      reduced
-	                                        mov     $0,%rdx
-	                                        mov     $10,%rcx
-	                                        div     %rcx
-	                                        add     %rax,%rdx
-	                                        jmp     reduce
-	                                reduced: ret
-	                                */
 	                                if (type==0) {
-	                                      printf("\n\t",label);
+	                                      printf("\n\tif(%s!=0) { %s %%=9; if(%s==0) %s=9; };",label, label, label, label);
 	                                } else {
 	                                      fprintf(stderr,"Error at line %d ROOT needs INTEGER LABEL for assign to.\n", linenum);
 	                                }
@@ -94,14 +85,13 @@ out dx, al
                                                 }                                                                                                                          
                                         } 
 					if (type==0) {  			
-						printf("\t__asm__\(\"1: pause; rdrand %%q0; jae 1b;\":\"=R\"\(%s));\n",label);
-						//printf("\t%s=longeger1;\n",label);
+						printf("\n\tasm\(\"1: pause; rdrand %0; jae 1b;\":\"=r\"\(%s));",label);
 					} else {
 						fprintf(stderr,"Error at line %d RANDOM needs INTEGER LABEL for assign to.\n", linenum);
 					}
 				}                                                                                                                                                                             
 {BG}*YIELD+                  {                                                                                                                                                                              
-                                        printf("\n\t__asm__\(\"pause;\");\n");                                                                                                                                     
+                                        printf("\n\tasm\(\"pause;\");\n");                                                                                                                                     
                                 } 
 
 {BG}*{LABEL}{BG}+:={BG}*COUNT{BG}+{LABEL}+	{

@@ -24,6 +24,7 @@
 - 2 datatypes: INTEGER, DENOTED
 - YIELD operator for CPU scheduling for goto loops that are too tight.
 - RANDOM operator for clean random from the CPU
+- ROOT assignment performs digital root. Like A := ROOT; changes A to it's integer root, a single digit.
 - INPUT and OUTPUT for standard input and output for literals and variables.
 - RETURN for return a small integer result to the Operating System. See zdatest.fst.
 - ? symbol for isomorphic compare.
