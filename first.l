@@ -58,8 +58,34 @@ out dx, al
 						printf("\n\tasm(\"inb $%d, %%0;\":\"=a\"(data));",port);
 						printf("\n\t%s = data;\n}",label);
 					}
+{BG}*{LABEL}{BG}*:={BG}*ROOT+         {
+	                                bzero(label,256);
+	                                sscanf(yytext," %s := ROOT",label);
+	                                for (long i=0;i<tp;i++) {
+	                                    if (strcmp(vars[i].label,label)==0) {
+	                                          type = vars[i].type;
+	                                          break;
+	                                    }
+	                                }
+	                                /*
+	                                reduce: cmp     $9,%rax
+	                                        jl      reduced
+	                                        mov     $0,%rdx
+	                                        mov     $10,%rcx
+	                                        div     %rcx
+	                                        add     %rax,%rdx
+	                                        jmp     reduce
+	                                reduced: ret
+	                                */
+	                                if (type==0) {
+	                                      printf("\n\t",label);
+	                                } else {
+	                                      fprintf(stderr,"Error at line %d ROOT needs INTEGER LABEL for assign to.\n", linenum);
+	                                }
+	                                }
+	                                                                                                                           	                                                	                                                                                                                                                                                                                                                	                                                                                                                                        	                                                                                                                        
 {BG}*{LABEL}{BG}*:={BG}*RANDOM+         {
-					 bzero(label,256);
+					 bzero(label,25);
 					 sscanf(yytext," %s := RANDOM",label);
 				         for (long i=0;i<tp;i++) {                                                                                                           
                                                 if (strcmp(vars[i].label,label)==0) {                                                                                      
@@ -68,14 +94,14 @@ out dx, al
                                                 }                                                                                                                          
                                         } 
 					if (type==0) {  			
-						printf("\tasm\(\"1: pause; rdrand %%q0; jae 1b;\":\"=R\"\(%s));\n",label);
+						printf("\t__asm__\(\"1: pause; rdrand %%q0; jae 1b;\":\"=R\"\(%s));\n",label);
 						//printf("\t%s=longeger1;\n",label);
 					} else {
-						fprintf(stderr,"Error at line %d RANDOM needs INTEGER for assign to.\n", linenum);
+						fprintf(stderr,"Error at line %d RANDOM needs INTEGER LABEL for assign to.\n", linenum);
 					}
 				}                                                                                                                                                                             
 {BG}*YIELD+                  {                                                                                                                                                                              
-                                        printf("\n\tasm\(\"pause;\");\n");                                                                                                                                     
+                                        printf("\n\t__asm__\(\"pause;\");\n");                                                                                                                                     
                                 } 
 
 {BG}*{LABEL}{BG}+:={BG}*COUNT{BG}+{LABEL}+	{
@@ -178,6 +204,7 @@ out dx, al
 	                                sscanf(yytext," PUT %s", label);
 	                                printf("\n\tputchar(%s);",label);
 	                        }
+
 {BG}*INTEGER{BG}+{LABEL}+	{
 					bzero(label,256);
 					sscanf(yytext," INTEGER %s", label);
