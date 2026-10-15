@@ -50,6 +50,7 @@
 # Examples
 - zdatest.fst returns a random integer.
 - ./first < zdatest.fst | cc -x c - -o zdatest
+- laz gives a result for each line of a file, laz < README.md, for example.
 - Other examples are similar
 
 # zda - A reality control, a work in progress.
