@@ -12,6 +12,7 @@ LETTER		[A-Z]
 INTEGER		[-]*[0-9]+
 ASSIGNER	[:][=]
 COLOR		RED|BLUE|GREEN|WHITE|BLACK|CLEAR|YELLOW|MAGENTA|CYAN|BLANK
+MOVE		LEFT|RIGHT|UP|DOWN|HOME
 %{
 
 #include <stdbool.h>
@@ -140,6 +141,14 @@ out dx, al
 					else if (strcmp(label,"CR")==0) printf("\n\tprintf(\"\\r\");");
 				}
 
+{BG}*OUTPUT{BG}+{MOVE}+	{
+					bzero(label,256);					
+					sscanf(yytext," OUTPUT %s", label);
+					if (strcmp(label,"UP")==0) printf("\n\tprintf(\"\033[1A\");");					
+					else if (strcmp(label,"DOWN")==0) printf("\n\tprintf(\"\033[1B\");");					
+					else if (strcmp(label,"RIGHT")==0) printf("\n\tprintf(\"\033[1C\");");					
+					else if (strcmp(label,"LEFT")==0) printf("\n\tprintf(\"\033[1D\");");
+			}	
 {BG}*OUTPUT{BG}+{LABEL}+	{
 				bzero(label,256);
 
