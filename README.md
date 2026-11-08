@@ -56,8 +56,9 @@
 - Other examples are similar
 
 # zda - A reality control, a work in progress.
-- zda.fst is a first source
+- zda.fst is a first, a proces language, implementation
 - The purpose is to out others that have a zero score.
+- Specifically, it targets instigators.
 - The compile procedure: ./first < zda.fst  | cc -o zda -x c -
 - Run it and see it run with the top utility.
 
